@@ -1,8 +1,10 @@
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flipkart_clone/features/auth/presentation/homescreen.dart';
-import 'package:flipkart_clone/features/auth/presentation/login_screen.dart';
-import 'package:flipkart_clone/features/auth/domain/auth_state_provider.dart'; // 👈 new
+import 'package:flipkart_clone/controller/product_provider.dart';
+
+import 'package:flipkart_clone/screens/bottom_nav_screen.dart';
+
+import 'package:flipkart_clone/screens/login_screen.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -20,9 +22,14 @@ class MyApp extends ConsumerWidget {
     final authState = ref.watch(authStateProvider);
 
     return MaterialApp(
+      theme: ThemeData(
+        scaffoldBackgroundColor: const Color.fromARGB(255, 237, 237, 237),
+      ),
       debugShowCheckedModeBanner: false,
       home: authState.when(
-        data: (user) => user != null ? const HomeScreen() : const LoginScreen(),
+        data: (user) =>
+            user != null ? const BottomNavScreen() : const LoginScreen(),
+
         loading: () =>
             const Scaffold(body: Center(child: CircularProgressIndicator())),
         error: (e, _) => Scaffold(body: Center(child: Text('Error: $e'))),

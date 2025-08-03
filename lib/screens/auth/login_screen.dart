@@ -1,95 +1,31 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flipkart_clone/features/auth/domain/auth_controller.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-class SignupScreen extends ConsumerStatefulWidget {
-  const SignupScreen({super.key});
+class LoginScreen extends ConsumerStatefulWidget {
+  const LoginScreen({super.key});
 
   @override
-  ConsumerState<SignupScreen> createState() => _SignupScreenState();
+  ConsumerState<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _SignupScreenState extends ConsumerState<SignupScreen> {
+class _LoginScreenState extends ConsumerState<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passController = TextEditingController();
-  final TextEditingController _usernameController = TextEditingController();
-
   bool _isLoading = false;
-
-  // void _signup() async {
-  //   if (!_formKey.currentState!.validate()) return;
-
-  //   setState(() => _isLoading = true);
-
-  //   final authController = ref.read(authControllerProvider);
-
-  //   try {
-  //     final user = await authController.signUp(
-  //       _emailController.text.trim(),
-  //       _passController.text.trim(),
-  //     );
-  //     if (user != null && mounted) {
-  //       Fluttertoast.showToast(
-  //         msg: "Login successful! 🎉",
-  //         toastLength: Toast.LENGTH_SHORT,
-  //         gravity: ToastGravity.BOTTOM,
-  //         backgroundColor: Colors.green,
-  //         textColor: Colors.white,
-  //         fontSize: 16.0,
-  //       );
-  //       await Future.delayed(Duration(milliseconds: 500));
-  //       Navigator.pushReplacementNamed(context, '/homescreen');
-  //     }
-  //   } on FirebaseAuthException catch (e) {
-  //     if (mounted) {
-  //       Fluttertoast.showToast(
-  //         msg: "${e.code}",
-  //         toastLength: Toast.LENGTH_SHORT,
-  //         gravity: ToastGravity.BOTTOM,
-  //         backgroundColor: Colors.green,
-  //         textColor: Colors.white,
-  //         fontSize: 16.0,
-  //       );
-  //       ;
-  //     }
-  //   } finally {
-  //     if (mounted) setState(() => _isLoading = false);
-  //   }
-  // }
-
-  // void _handleGoogleSignIn() async {
-  //   setState(() => _isLoading = true);
-
-  //   final authController = ref.read(authControllerProvider);
-
-  //   try {
-  //     final user = await authController.signInWithGoogle();
-  //     if (user != null && mounted) {
-  //       Navigator.pushReplacementNamed(context, '/noteslist_screen');
-  //     }
-  //   } catch (e) {
-  //     if (mounted) {
-  //       ScaffoldMessenger.of(
-  //         context,
-  //       ).showSnackBar(SnackBar(content: Text("Google Sign-In failed: $e")));
-  //     }
-  //   } finally {
-  //     if (mounted) setState(() => _isLoading = false);
-  //   }
-  // }
 
   @override
   Widget build(BuildContext context) {
     final user = ref.watch(authControllerProvider);
     if (user != null) {
+      // This triggers auto redirect (because main.dart watches this state)
       Future.microtask(() {
         Navigator.pushReplacementNamed(context, '/homescreen');
       });
     }
-    print("signup page built");
+    print("login page built");
     return Scaffold(
       backgroundColor: const Color(0xFFF1F3F6),
       appBar: AppBar(
@@ -97,10 +33,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
         elevation: 0,
         title: Row(
           children: [
-            Image.asset(
-              'assets/images/flipkart_logo.png', // Ensure this image exists
-              height: 32,
-            ),
+            Image.asset('assets/images/flipkart_logo.png', height: 32),
             const SizedBox(width: 8),
             const Text(
               'Flipkart',
@@ -136,10 +69,9 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                 child: Form(
                   key: _formKey,
                   child: Column(
-                    mainAxisSize: MainAxisSize.min,
                     children: [
                       const Text(
-                        'Create Account',
+                        'Welcome Back',
                         style: TextStyle(
                           fontSize: 22,
                           fontWeight: FontWeight.bold,
@@ -147,15 +79,6 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                         ),
                       ),
                       const SizedBox(height: 24),
-                      _buildInputField(
-                        label: "Full Name",
-                        icon: Icons.person_outline,
-                        controller: _usernameController,
-                        validator: (val) => val == null || val.trim().isEmpty
-                            ? "Enter your name"
-                            : null,
-                      ),
-                      const SizedBox(height: 16),
                       _buildInputField(
                         label: "Email Address",
                         icon: Icons.email_outlined,
@@ -185,7 +108,15 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                           return null;
                         },
                       ),
-                      const SizedBox(height: 24),
+                      const SizedBox(height: 12),
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: TextButton(
+                          onPressed: () {}, // Add forgot password logic here
+                          child: const Text("Forgot Password?"),
+                        ),
+                      ),
+                      const SizedBox(height: 12),
                       SizedBox(
                         width: double.infinity,
                         height: 50,
@@ -200,29 +131,28 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
 
                                   final user = await ref
                                       .read(authControllerProvider.notifier)
-                                      .signUp(
+                                      .login(
                                         _emailController.text.trim(),
                                         _passController.text.trim(),
-                                        _usernameController.text.trim(),
                                       );
 
                                   setState(() => _isLoading = false);
 
                                   if (user == null) {
                                     Fluttertoast.showToast(
-                                      msg: "Signup failed!",
+                                      msg: "Login failed!",
                                       backgroundColor: Colors.red,
                                       textColor: Colors.white,
                                     );
                                   }
-                                  // ✅ No need for Navigator, auto-redirect is handled above
+                                  // ✅ No need for Navigator here, it's handled by authStateChanges!
                                 },
                           style: ElevatedButton.styleFrom(
                             foregroundColor: const Color.fromARGB(
                               255,
-                              255,
-                              255,
-                              255,
+                              253,
+                              253,
+                              253,
                             ),
                             backgroundColor: const Color(0xFF2874F0),
                             shape: RoundedRectangleBorder(
@@ -234,7 +164,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                                   color: Colors.white,
                                 )
                               : const Text(
-                                  "Sign Up",
+                                  "Login",
                                   style: TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.bold,
@@ -243,63 +173,43 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                         ),
                       ),
                       const SizedBox(height: 16),
-                      TextButton(
-                        onPressed: () =>
-                            Navigator.pushReplacementNamed(context, '/login'),
-                        child: const Text(
-                          "Already have an account? Login",
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: Color(0xFF2874F0),
-                          ),
+                      const Text("OR"),
+                      const SizedBox(height: 12),
+                      OutlinedButton.icon(
+                        onPressed: () async {
+                          setState(() => _isLoading = true);
+
+                          final user = await ref
+                              .read(authControllerProvider.notifier)
+                              .signInWithGoogle();
+
+                          setState(() => _isLoading = false);
+
+                          if (user == null) {
+                            Fluttertoast.showToast(
+                              msg: "Google sign-in failed!",
+                              backgroundColor: Colors.red,
+                            );
+                          }
+                        },
+                        icon: Image.asset(
+                          'assets/images/g_logo.png',
+                          height: 20,
+                        ),
+                        label: const Text("Login with Google"),
+                        style: OutlinedButton.styleFrom(
+                          minimumSize: const Size(double.infinity, 50),
+                          side: const BorderSide(color: Colors.grey),
                         ),
                       ),
-
                       const SizedBox(height: 16),
-                      const Text(
-                        "OR",
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      const SizedBox(height: 16),
-                      SizedBox(
-                        width: double.infinity,
-                        height: 50,
-                        child: OutlinedButton.icon(
-                          icon: Image.asset(
-                            'assets/images/g_logo.png', // ✅ add this asset to your project
-                            height: 24,
-                          ),
-                          label: const Text(
-                            "Continue with Google",
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                          style: OutlinedButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(6),
-                            ),
-                          ),
-                          onPressed: _isLoading
-                              ? null
-                              : () async {
-                                  setState(() => _isLoading = true);
-
-                                  final user = await ref
-                                      .read(authControllerProvider.notifier)
-                                      .signInWithGoogle();
-
-                                  setState(() => _isLoading = false);
-
-                                  if (user == null) {
-                                    Fluttertoast.showToast(
-                                      msg: "Google sign-in failed!",
-                                      backgroundColor: Colors.red,
-                                    );
-                                  }
-                                  // ✅ No manual navigator needed
-                                },
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pushNamed(context, '/');
+                        },
+                        child: const Text(
+                          "Don't have an account? Sign Up",
+                          style: TextStyle(color: Color(0xFF2874F0)),
                         ),
                       ),
                     ],

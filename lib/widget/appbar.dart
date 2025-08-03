@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
-buildFlipkartAppBar() {
+PreferredSizeWidget buildFlipkartAppBar(BuildContext context) {
+  print("appbar built");
   return AppBar(
+    automaticallyImplyLeading: false,
     backgroundColor: const Color(0xFF2874F0),
     elevation: 0,
     title: Row(
@@ -19,7 +21,7 @@ buildFlipkartAppBar() {
                   hintText: "Search for products, brands and more",
                   hintStyle: TextStyle(color: Colors.white70),
                   filled: true,
-                  fillColor: Color(0xFF1565C0), // Slightly darker blue
+                  fillColor: Color(0xFF1565C0),
                   contentPadding: EdgeInsets.symmetric(
                     vertical: 8,
                     horizontal: 12,
@@ -35,12 +37,19 @@ buildFlipkartAppBar() {
           ),
         ),
         IconButton(
-          onPressed: () {},
+          onPressed: () {
+            // Your cart logic
+          },
           icon: const Icon(Icons.shopping_cart, color: Colors.white),
         ),
-        IconButton(
-          onPressed: () {},
-          icon: const Icon(Icons.person_outline, color: Colors.white),
+        Builder(
+          // Important: allows access to Scaffold.of(context)
+          builder: (context) => IconButton(
+            onPressed: () {
+              Scaffold.of(context).openDrawer(); // This opens the drawer
+            },
+            icon: const Icon(Icons.person_outline, color: Colors.white),
+          ),
         ),
       ],
     ),
