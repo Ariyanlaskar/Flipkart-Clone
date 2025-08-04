@@ -1,7 +1,6 @@
-import 'package:flipkart_clone/features/auth/data/auth_repo.dart';
+import 'package:flipkart_clone/features/auth/auth_repo.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import '../data/auth_repo.dart';
 
 final authRepositoryProvider = Provider<AuthRepository>((ref) {
   return AuthRepository();
@@ -32,9 +31,14 @@ class AuthController extends StateNotifier<User?> {
   }
 
   Future<User?> login(String email, String password) async {
-    final user = await _repo.login(email, password);
-    state = user;
-    return user;
+    try {
+      final userCredential = await FirebaseAuth.instance
+          .signInWithEmailAndPassword(email: email, password: password);
+      return userCredential.user;
+    } on FirebaseAuthException catch (e) {
+      print('Login failed: ${e.code} | ${e.message}');
+      return null;
+    }
   }
 
   Future<User?> signInWithGoogle() async {

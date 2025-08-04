@@ -8,6 +8,9 @@ final authStateProvider = StreamProvider<User?>((ref) {
   return FirebaseAuth.instance.authStateChanges();
 });
 
+/// Holds the currently selected category (null means nothing selected)
+final selectedCategoryProvider = StateProvider<String?>((ref) => null);
+
 final productListProvider = FutureProvider<List<ProductModel>>((ref) async {
   final snapshot = await FirebaseFirestore.instance
       .collection('products')
@@ -60,7 +63,7 @@ final dealOfTheDayProvider = FutureProvider<List<ProductModel>>((ref) async {
 });
 
 // This is for product pagination which will enable lazy loading
-
+// For lazyloading feature
 class PaginatedProductNotifier extends StateNotifier<PaginatedProductState> {
   final Ref ref;
   final String? category;
@@ -125,3 +128,16 @@ final paginatedProductsProvider =
       PaginatedProductState,
       String
     >((ref, category) => PaginatedProductNotifier(ref, category));
+
+// For splash screen
+
+final splashControllerProvider = FutureProvider<void>((ref) async {
+  // Wait for Firebase and auth state to resolve
+
+  // Optionally wait for critical data too:
+  // await ref.read(paginatedProductsProvider('ALL').notifier).fetchInitial();
+
+  await Future.delayed(
+    const Duration(milliseconds: 3000),
+  ); // slight delay to show splash
+});

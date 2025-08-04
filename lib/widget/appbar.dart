@@ -1,15 +1,22 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 PreferredSizeWidget buildFlipkartAppBar(BuildContext context) {
-  print("appbar built");
+  if (kDebugMode) {
+    print("appbar built");
+  }
   return AppBar(
     automaticallyImplyLeading: false,
     backgroundColor: const Color(0xFF2874F0),
     elevation: 0,
     title: Row(
       children: [
-        Image.asset('assets/images/flipkart_logo.png', height: 28),
-        const SizedBox(width: 8),
+        Image.asset(
+          'assets/images/flipkart_logo.png',
+          height: MediaQuery.of(context).size.height / 15,
+          // width: MediaQuery.of(context).size.width / 5,
+        ),
+        const SizedBox(width: 1),
         const Expanded(
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 8),

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flipkart_clone/screens/homescreen.dart';
+import 'package:flipkart_clone/screens/home/homescreen.dart';
 
 class BottomNavScreen extends StatefulWidget {
   const BottomNavScreen({super.key});

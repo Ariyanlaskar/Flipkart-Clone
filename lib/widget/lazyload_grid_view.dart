@@ -1,10 +1,12 @@
 import 'package:flipkart_clone/controller/product_provider.dart';
-import 'package:flipkart_clone/controller/select_cat_provider.dart';
+
 import 'package:flipkart_clone/features/products/grid_product_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class LazyProductGrid extends ConsumerWidget {
+  const LazyProductGrid({super.key});
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final selectedCategory = ref.watch(selectedCategoryProvider);

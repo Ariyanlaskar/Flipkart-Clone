@@ -19,11 +19,21 @@ class AuthRepository {
   }
 
   Future<User?> login(String email, String password) async {
-    final cred = await _auth.signInWithEmailAndPassword(
-      email: email,
-      password: password,
-    );
-    return cred.user;
+    try {
+      final cred = await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: email.trim(),
+        password: password,
+      );
+      return cred.user;
+    } on FirebaseAuthException catch (e) {
+      print('Login error: ${e.code} | ${e.message}');
+    }
+    return null;
+
+    // final cred = await _auth.signInWithEmailAndPassword(
+    //   email: email,
+    //   password: password,
+    // );
   }
 
   Future<User?> signInWithGoogle() async {

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flipkart_clone/features/auth/domain/auth_controller.dart';
+import 'package:flipkart_clone/features/auth/auth_controller.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
@@ -22,6 +22,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     if (user != null) {
       // This triggers auto redirect (because main.dart watches this state)
       Future.microtask(() {
+        // ignore: use_build_context_synchronously
         Navigator.pushReplacementNamed(context, '/homescreen');
       });
     }
@@ -101,10 +102,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         controller: _passController,
                         obscureText: true,
                         validator: (val) {
-                          if (val == null || val.isEmpty)
+                          if (val == null || val.isEmpty) {
                             return "Enter password";
-                          if (val.length < 6)
+                          }
+                          if (val.length < 6) {
                             return "Minimum 6 characters required";
+                          }
                           return null;
                         },
                       ),
@@ -124,8 +127,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                           onPressed: _isLoading
                               ? null
                               : () async {
-                                  if (!_formKey.currentState!.validate())
+                                  if (!_formKey.currentState!.validate()) {
                                     return;
+                                  }
 
                                   setState(() => _isLoading = true);
 
@@ -133,19 +137,20 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                       .read(authControllerProvider.notifier)
                                       .login(
                                         _emailController.text.trim(),
-                                        _passController.text.trim(),
+                                        _passController.text,
                                       );
 
-                                  setState(() => _isLoading = false);
+                                  if (mounted) {
+                                    setState(() => _isLoading = false);
+                                  }
 
                                   if (user == null) {
                                     Fluttertoast.showToast(
-                                      msg: "Login failed!",
+                                      msg: "Login failed! Invalid credentials.",
                                       backgroundColor: Colors.red,
                                       textColor: Colors.white,
                                     );
                                   }
-                                  // ✅ No need for Navigator here, it's handled by authStateChanges!
                                 },
                           style: ElevatedButton.styleFrom(
                             foregroundColor: const Color.fromARGB(

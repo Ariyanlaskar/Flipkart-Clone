@@ -1,7 +1,6 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flipkart_clone/features/auth/domain/auth_controller.dart';
+import 'package:flipkart_clone/features/auth/auth_controller.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class SignupScreen extends ConsumerStatefulWidget {
@@ -24,6 +23,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
     final user = ref.watch(authControllerProvider);
     if (user != null) {
       Future.microtask(() {
+        // ignore: use_build_context_synchronously
         Navigator.pushReplacementNamed(context, '/homescreen');
       });
     }
@@ -116,10 +116,12 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                         controller: _passController,
                         obscureText: true,
                         validator: (val) {
-                          if (val == null || val.isEmpty)
+                          if (val == null || val.isEmpty) {
                             return "Enter password";
-                          if (val.length < 6)
+                          }
+                          if (val.length < 6) {
                             return "Minimum 6 characters required";
+                          }
                           return null;
                         },
                       ),
@@ -131,8 +133,9 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                           onPressed: _isLoading
                               ? null
                               : () async {
-                                  if (!_formKey.currentState!.validate())
+                                  if (!_formKey.currentState!.validate()) {
                                     return;
+                                  }
 
                                   setState(() => _isLoading = true);
 
@@ -153,7 +156,6 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                                       textColor: Colors.white,
                                     );
                                   }
-                                  // ✅ No need for Navigator, auto-redirect is handled above
                                 },
                           style: ElevatedButton.styleFrom(
                             foregroundColor: const Color.fromARGB(
@@ -204,7 +206,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                         height: 50,
                         child: OutlinedButton.icon(
                           icon: Image.asset(
-                            'assets/images/g_logo.png', // ✅ add this asset to your project
+                            'assets/images/g_logo.png',
                             height: 24,
                           ),
                           label: const Text(
@@ -236,7 +238,6 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                                       backgroundColor: Colors.red,
                                     );
                                   }
-                                  // ✅ No manual navigator needed
                                 },
                         ),
                       ),
@@ -281,65 +282,3 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
     );
   }
 }
-
-  // void _signup() async {
-  //   if (!_formKey.currentState!.validate()) return;
-
-  //   setState(() => _isLoading = true);
-
-  //   final authController = ref.read(authControllerProvider);
-
-  //   try {
-  //     final user = await authController.signUp(
-  //       _emailController.text.trim(),
-  //       _passController.text.trim(),
-  //     );
-  //     if (user != null && mounted) {
-  //       Fluttertoast.showToast(
-  //         msg: "Login successful! 🎉",
-  //         toastLength: Toast.LENGTH_SHORT,
-  //         gravity: ToastGravity.BOTTOM,
-  //         backgroundColor: Colors.green,
-  //         textColor: Colors.white,
-  //         fontSize: 16.0,
-  //       );
-  //       await Future.delayed(Duration(milliseconds: 500));
-  //       Navigator.pushReplacementNamed(context, '/homescreen');
-  //     }
-  //   } on FirebaseAuthException catch (e) {
-  //     if (mounted) {
-  //       Fluttertoast.showToast(
-  //         msg: "${e.code}",
-  //         toastLength: Toast.LENGTH_SHORT,
-  //         gravity: ToastGravity.BOTTOM,
-  //         backgroundColor: Colors.green,
-  //         textColor: Colors.white,
-  //         fontSize: 16.0,
-  //       );
-  //       ;
-  //     }
-  //   } finally {
-  //     if (mounted) setState(() => _isLoading = false);
-  //   }
-  // }
-
-  // void _handleGoogleSignIn() async {
-  //   setState(() => _isLoading = true);
-
-  //   final authController = ref.read(authControllerProvider);
-
-  //   try {
-  //     final user = await authController.signInWithGoogle();
-  //     if (user != null && mounted) {
-  //       Navigator.pushReplacementNamed(context, '/noteslist_screen');
-  //     }
-  //   } catch (e) {
-  //     if (mounted) {
-  //       ScaffoldMessenger.of(
-  //         context,
-  //       ).showSnackBar(SnackBar(content: Text("Google Sign-In failed: $e")));
-  //     }
-  //   } finally {
-  //     if (mounted) setState(() => _isLoading = false);
-  //   }
-  // }

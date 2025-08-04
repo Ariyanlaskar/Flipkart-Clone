@@ -1,4 +1,4 @@
-import 'package:flipkart_clone/controller/select_cat_provider.dart';
+import 'package:flipkart_clone/controller/product_provider.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -42,14 +42,6 @@ class CategoryBar extends ConsumerWidget {
               // 🔄 Update selected category in provider
               ref.read(selectedCategoryProvider.notifier).state =
                   selected == selectedCategory ? null : selected;
-
-              // 🚀 Navigate to category product list screen
-              // Navigator.push(
-              //   context,
-              //   MaterialPageRoute(
-              //     builder: (_) => CategoryProductListScreen(category: selected),
-              //   ),
-              // );
             },
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8),

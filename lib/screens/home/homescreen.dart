@@ -1,4 +1,3 @@
-import 'package:flipkart_clone/controller/select_cat_provider.dart';
 import 'package:flipkart_clone/features/products/grid_product_card.dart';
 import 'package:flipkart_clone/widget/appbar.dart';
 import 'package:flipkart_clone/widget/categorybar.dart';
