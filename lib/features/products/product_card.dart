@@ -1,6 +1,6 @@
-import 'package:flipkart_clone/model/product_model.dart';
 import 'package:flipkart_clone/screens/product_details_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flipkart_clone/model/product_model.dart';
 
 class ProductCard extends StatelessWidget {
   final ProductModel product;
@@ -11,7 +11,7 @@ class ProductCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        // print("tapped card");
+        print("tapped card");
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -40,13 +40,16 @@ class ProductCard extends StatelessWidget {
               padding: const EdgeInsets.all(20.0),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(6),
-                child: Image.network(
-                  product.imageURL,
-                  height: 100,
-                  width: double.infinity,
-                  fit: BoxFit.contain,
-                  errorBuilder: (context, error, stackTrace) =>
-                      const Icon(Icons.broken_image),
+                child: Hero(
+                  tag: product.imageURL,
+                  child: Image.network(
+                    product.imageURL,
+                    height: 100,
+                    width: double.infinity,
+                    fit: BoxFit.contain,
+                    errorBuilder: (context, error, stackTrace) =>
+                        const Icon(Icons.broken_image),
+                  ),
                 ),
               ),
             ),

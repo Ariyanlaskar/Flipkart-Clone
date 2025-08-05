@@ -1,11 +1,34 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flipkart_clone/features/cart/cart_model.dart';
+import 'package:flipkart_clone/features/cart/cart_repo.dart';
 import 'package:flipkart_clone/repo/pagination_prod_state.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flipkart_clone/model/product_model.dart';
 
 final authStateProvider = StreamProvider<User?>((ref) {
   return FirebaseAuth.instance.authStateChanges();
+});
+
+//Implementing search functionlaity(retrieve search history,search by words)
+
+final searchQueryProvider = StateProvider<String>((ref) => '');
+
+final searchResultsProvider = FutureProvider<List<ProductModel>>((ref) async {
+  final query = ref.watch(searchQueryProvider);
+  if (query.isEmpty) return [];
+
+  final snapshot = await FirebaseFirestore.instance
+      .collection('products')
+      .get();
+
+  // Client-side filtering for now (Firestore doesn't support 'contains' natively)
+  return snapshot.docs
+      .map((doc) => ProductModel.fromMap(doc.data()))
+      .where(
+        (product) => product.title.toLowerCase().contains(query.toLowerCase()),
+      )
+      .toList();
 });
 
 /// Holds the currently selected category (null means nothing selected)
@@ -141,3 +164,31 @@ final splashControllerProvider = FutureProvider<void>((ref) async {
     const Duration(milliseconds: 3000),
   ); // slight delay to show splash
 });
+
+//For Add to Cart functionality
+
+final cartRepositoryProvider = Provider((ref) => CartRepo());
+
+final cartItemsProvider = StreamProvider<List<CartItem>>((ref) {
+  return ref.watch(cartRepositoryProvider).getCartItems();
+});
+
+class CartItemsNotifier extends StateNotifier<List<ProductModel>> {
+  CartItemsNotifier() : super([]);
+
+  void addItem(ProductModel item) {
+    state = [...state, item];
+  }
+
+  void removeItem(ProductModel item) {
+    state = state.where((e) => e != item).toList();
+  }
+
+  void clearCart() {
+    state = [];
+  }
+}
+
+// final cartItemsProvider =
+//     StateNotifierProvider<CartItemsNotifier, List<ProductModel>>(
+//         (ref) => CartItemsNotifier());
