@@ -170,7 +170,10 @@ final splashControllerProvider = FutureProvider<void>((ref) async {
 final cartRepositoryProvider = Provider((ref) => CartRepo());
 
 final cartItemsProvider = StreamProvider<List<CartItem>>((ref) {
-  return ref.watch(cartRepositoryProvider).getCartItems();
+  final user = ref.watch(authStateProvider).value;
+  if (user == null) return const Stream.empty(); // No cart if not logged in
+
+  return ref.watch(cartRepositoryProvider).getCartItems(user.uid);
 });
 
 class CartItemsNotifier extends StateNotifier<List<ProductModel>> {

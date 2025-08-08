@@ -1,3 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flipkart_clone/controller/product_provider.dart';
+import 'package:flipkart_clone/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flipkart_clone/features/auth/auth_controller.dart';
@@ -15,17 +18,40 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passController = TextEditingController();
   bool _isLoading = false;
+  bool _didListen = false;
 
   @override
+  // void initState() {
+  //   super.initState();
+  //   ref.listen<User?>(authControllerProvider, (previous, next) {
+  //     if (next != null) {
+  //       Navigator.pushReplacementNamed(context, '/homescreen');
+  //     }
+  //   });
+  // }
   Widget build(BuildContext context) {
-    final user = ref.watch(authControllerProvider);
-    if (user != null) {
-      // This triggers auto redirect (because main.dart watches this state)
-      Future.microtask(() {
-        // ignore: use_build_context_synchronously
-        Navigator.pushReplacementNamed(context, '/homescreen');
+    // final user = ref.watch(authControllerProvider);
+    // if (user != null) {
+    //   Future.microtask(() {
+    //     Navigator.pushReplacementNamed(
+    //       context,
+    //       AppRoutes.home,
+    //     ); // << change to correct route
+    //   });
+    // }
+    if (!_didListen) {
+      ref.listen<AsyncValue<User?>>(authStateProvider, (previous, next) {
+        next.whenData((user) {
+          if (user != null) {
+            Navigator.pushReplacementNamed(context, '/homescreen');
+          }
+        });
       });
+      _didListen = true;
     }
+
+    // print("login page built");
+
     print("login page built");
     return Scaffold(
       backgroundColor: const Color(0xFFF1F3F6),
@@ -139,6 +165,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                         _emailController.text.trim(),
                                         _passController.text,
                                       );
+                                  if (user != null && mounted) {
+                                    Navigator.pushReplacementNamed(
+                                      context,
+                                      AppRoutes.home,
+                                    );
+                                  }
 
                                   if (mounted) {
                                     setState(() => _isLoading = false);
@@ -188,7 +220,16 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                               .read(authControllerProvider.notifier)
                               .signInWithGoogle();
 
-                          setState(() => _isLoading = false);
+                          if (mounted) {
+                            setState(() => _isLoading = false);
+                          }
+
+                          if (user != null && mounted) {
+                            Navigator.pushReplacementNamed(
+                              context,
+                              AppRoutes.home,
+                            );
+                          }
 
                           if (user == null) {
                             Fluttertoast.showToast(
@@ -210,7 +251,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       const SizedBox(height: 16),
                       TextButton(
                         onPressed: () {
-                          Navigator.pushNamed(context, '/');
+                          Navigator.pushReplacementNamed(
+                            context,
+                            AppRoutes.signUp,
+                          );
                         },
                         child: const Text(
                           "Don't have an account? Sign Up",

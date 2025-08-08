@@ -78,19 +78,16 @@ class CartRepo {
     }
   }
 
-  // Stream cart items
-  Stream<List<CartItem>> getCartItems() {
+  // ✅ Updated to take UID explicitly
+  Stream<List<CartItem>> getCartItems(String uid) {
     return _firestore
         .collection("users")
-        .doc(userId)
+        .doc(uid)
         .collection('cart')
         .snapshots()
         .map(
-          (snapshot) => snapshot.docs
-              .map(
-                (doc) => CartItem.fromMap(doc.data()),
-              ) // <-- uses 'productId'
-              .toList(),
+          (snapshot) =>
+              snapshot.docs.map((doc) => CartItem.fromMap(doc.data())).toList(),
         );
   }
 }

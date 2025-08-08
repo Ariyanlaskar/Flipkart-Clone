@@ -1,5 +1,6 @@
-import 'package:flutter/material.dart';
+import 'package:flipkart_clone/screens/account_screen.dart';
 import 'package:flipkart_clone/screens/home/homescreen.dart';
+import 'package:flutter/material.dart';
 
 class BottomNavScreen extends StatefulWidget {
   const BottomNavScreen({super.key});
@@ -11,13 +12,23 @@ class BottomNavScreen extends StatefulWidget {
 class _BottomNavScreenState extends State<BottomNavScreen> {
   int _selectedIndex = 0;
 
-  final List<Widget> _pages = [
-    const HomeScreen(),
-    Center(child: Text("Categories")),
-    Center(child: Text("Search")),
-    Center(child: Text("Wishlist")),
-    Center(child: Text("Account")),
-  ];
+  // Use method to dynamically return screens so user state is always fresh
+  Widget _getScreen(int index) {
+    switch (index) {
+      case 0:
+        return const HomeScreen();
+      case 1:
+        return const Center(child: Text("Categories"));
+      case 2:
+        return const Center(child: Text("Search"));
+      case 3:
+        return const Center(child: Text("Wishlist"));
+      case 4:
+        return const AccountScreen();
+      default:
+        return const HomeScreen();
+    }
+  }
 
   void _onItemTapped(int index) {
     setState(() {
@@ -28,7 +39,7 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _pages[_selectedIndex],
+      body: _getScreen(_selectedIndex),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,

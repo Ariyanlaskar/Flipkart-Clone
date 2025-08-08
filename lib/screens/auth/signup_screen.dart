@@ -1,3 +1,4 @@
+import 'package:flipkart_clone/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flipkart_clone/features/auth/auth_controller.dart';
@@ -24,7 +25,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
     if (user != null) {
       Future.microtask(() {
         // ignore: use_build_context_synchronously
-        Navigator.pushReplacementNamed(context, '/homescreen');
+        Navigator.pushReplacementNamed(context, AppRoutes.home);
       });
     }
     print("signup page built");
@@ -137,7 +138,11 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                                     return;
                                   }
 
-                                  setState(() => _isLoading = true);
+                                  if (mounted) {
+                                    setState(() {
+                                      _isLoading = false;
+                                    });
+                                  }
 
                                   final user = await ref
                                       .read(authControllerProvider.notifier)
@@ -147,7 +152,11 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                                         _usernameController.text.trim(),
                                       );
 
-                                  setState(() => _isLoading = false);
+                                  if (mounted) {
+                                    setState(() {
+                                      _isLoading = false;
+                                    });
+                                  }
 
                                   if (user == null) {
                                     Fluttertoast.showToast(
@@ -184,8 +193,10 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                       ),
                       const SizedBox(height: 16),
                       TextButton(
-                        onPressed: () =>
-                            Navigator.pushReplacementNamed(context, '/login'),
+                        onPressed: () => Navigator.pushReplacementNamed(
+                          context,
+                          AppRoutes.login,
+                        ),
                         child: const Text(
                           "Already have an account? Login",
                           style: TextStyle(
