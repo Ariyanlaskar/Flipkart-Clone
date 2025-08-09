@@ -1,18 +1,18 @@
 import 'package:flipkart_clone/controller/product_provider.dart';
-import 'package:flipkart_clone/features/cart/cart_repo.dart';
+import 'package:flipkart_clone/features/wishlist/wishlist_provider.dart';
+
 import 'package:flipkart_clone/model/product_model.dart';
 import 'package:flipkart_clone/widget/custom_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
-class ProductDetailScreen extends StatelessWidget {
+class ProductDetailScreen extends ConsumerWidget {
   final ProductModel product;
 
   const ProductDetailScreen({super.key, required this.product});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final screenWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
@@ -31,7 +31,7 @@ class ProductDetailScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _buildImageCarousel([product.imageURL], screenWidth),
+                _buildImageCarousel([product.imageURL], screenWidth, ref),
 
                 _buildTitleAndPrice(context, product, screenWidth),
                 _buildRating(product),
@@ -48,23 +48,98 @@ class ProductDetailScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildImageCarousel(List<String> images, double screenWidth) {
-    return Container(
-      height: screenWidth * 0.75,
-      color: Colors.white,
-      child: Column(
-        children: [
-          const SizedBox(height: 20),
-          Hero(
-            tag: product.imageURL,
-            child: Image.network(
-              product.imageURL, // Use the same image from ProductCard
-              height: screenWidth * 0.63,
-              fit: BoxFit.contain,
-              width: screenWidth,
-            ),
+  Widget _buildImageCarousel(
+    List<String> images,
+    double screenWidth,
+    WidgetRef ref,
+  ) {
+    final wishlistAsync = ref.watch(wishlistStreamProvider);
+    final wishlistController = ref.read(wishlistControllerProvider);
+
+    return wishlistAsync.when(
+      data: (wishlistItems) {
+        final isInWishlist = wishlistItems.any(
+          (item) => item.productId == product.id,
+        );
+
+        return Container(
+          height: screenWidth * 0.75,
+          color: Colors.white,
+          child: Column(
+            children: [
+              const SizedBox(height: 20),
+              Stack(
+                children: [
+                  Hero(
+                    tag: product.imageURL,
+                    child: Image.network(
+                      product.imageURL,
+                      height: screenWidth * 0.63,
+                      fit: BoxFit.contain,
+                      width: screenWidth,
+                    ),
+                  ),
+                  Positioned(
+                    top: 10,
+                    right: 10,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.85),
+                        shape: BoxShape.circle,
+                        boxShadow: const [
+                          BoxShadow(
+                            color: Colors.black12,
+                            blurRadius: 6,
+                            offset: Offset(0, 2),
+                          ),
+                        ],
+                      ),
+                      child: IconButton(
+                        icon: Icon(
+                          isInWishlist ? Icons.favorite : Icons.favorite_border,
+                          color: isInWishlist ? Colors.red : Colors.grey[700],
+                          size: 28,
+                        ),
+                        tooltip: isInWishlist
+                            ? 'Remove from wishlist'
+                            : 'Add to wishlist',
+                        onPressed: () async {
+                          if (isInWishlist) {
+                            await wishlistController.removeFromWishlist(
+                              product.id,
+                            );
+                            ScaffoldMessenger.of(ref.context).showSnackBar(
+                              const SnackBar(
+                                content: Text('Removed from wishlist'),
+                              ),
+                            );
+                          } else {
+                            await wishlistController.addToWishlist(product.id);
+                            ScaffoldMessenger.of(ref.context).showSnackBar(
+                              const SnackBar(
+                                content: Text('Added to wishlist'),
+                              ),
+                            );
+                          }
+                        },
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
           ),
-        ],
+        );
+      },
+      loading: () => Container(
+        height: screenWidth * 0.75,
+        alignment: Alignment.center,
+        child: const CircularProgressIndicator(),
+      ),
+      error: (e, st) => Container(
+        height: screenWidth * 0.75,
+        alignment: Alignment.center,
+        child: const Icon(Icons.error, color: Colors.red),
       ),
     );
   }

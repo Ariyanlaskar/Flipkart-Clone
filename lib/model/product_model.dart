@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class ProductModel {
   final String id;
   final String title;
@@ -28,6 +30,7 @@ class ProductModel {
   // Getter to simulate images list from single imageURL
   List<String> get images => [imageURL];
 
+  /// ✅ Use this to create from plain Map
   factory ProductModel.fromMap(Map<String, dynamic> map) {
     return ProductModel(
       id: map['id']?.toString() ?? '',
@@ -42,5 +45,31 @@ class ProductModel {
       offers: List<String>.from(map['offers'] ?? []),
       specifications: map['specifications']?.toString() ?? '',
     );
+  }
+
+  /// ✅ Use this when using `.withConverter<ProductModel>()`
+  factory ProductModel.fromFirestore(
+    DocumentSnapshot<Map<String, dynamic>> snapshot,
+    SnapshotOptions? options,
+  ) {
+    final data = snapshot.data()!;
+    return ProductModel.fromMap(data);
+  }
+
+  /// ✅ Required for `toFirestore` in converter
+  Map<String, dynamic> toFirestore() {
+    return {
+      'id': id,
+      'title': title,
+      'imageURL': imageURL,
+      'price': price,
+      'discount': discount,
+      'category': category,
+      'mrp': mrp,
+      'rating': rating,
+      'reviews': reviews,
+      'offers': offers,
+      'specifications': specifications,
+    };
   }
 }

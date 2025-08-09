@@ -3,12 +3,12 @@ import 'package:flipkart_clone/controller/product_provider.dart';
 import 'package:flipkart_clone/screens/address_screen.dart';
 import 'package:flipkart_clone/screens/auth/about_screen.dart';
 import 'package:flipkart_clone/screens/order_screen.dart';
-import 'package:flipkart_clone/routes/app_routes.dart'; // ✅ Add this
+import 'package:flipkart_clone/routes/app_routes.dart';
 import 'package:flipkart_clone/screens/auth/login_screen.dart';
 import 'package:flipkart_clone/screens/auth/signup_screen.dart';
 import 'package:flipkart_clone/screens/edit_profile_screen.dart';
 import 'package:flipkart_clone/screens/home/bottom_nav_screen.dart';
-import 'package:flipkart_clone/screens/home/homescreen.dart';
+
 import 'package:flipkart_clone/screens/splash_screen.dart';
 import 'package:flipkart_clone/screens/support_screen.dart';
 import 'package:flipkart_clone/screens/wishlist_screen.dart';
@@ -39,7 +39,7 @@ class MyApp extends ConsumerWidget {
         AppRoutes.home: (context) => const BottomNavScreen(),
         AppRoutes.editProfile: (context) => const EditProfileScreen(),
         AppRoutes.orders: (context) => const OrderScreen(),
-        AppRoutes.wishlist: (context) => const WishlistScreen(),
+        AppRoutes.wishlist: (context) => WishlistScreen(),
         AppRoutes.addresses: (context) => const AddressScreen(),
         AppRoutes.support: (context) => const SupportScreen(),
         AppRoutes.about: (context) => const AboutScreen(),

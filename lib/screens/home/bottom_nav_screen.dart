@@ -1,5 +1,6 @@
 import 'package:flipkart_clone/screens/account_screen.dart';
 import 'package:flipkart_clone/screens/home/homescreen.dart';
+import 'package:flipkart_clone/screens/wishlist_screen.dart';
 import 'package:flutter/material.dart';
 
 class BottomNavScreen extends StatefulWidget {
@@ -22,7 +23,7 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
       case 2:
         return const Center(child: Text("Search"));
       case 3:
-        return const Center(child: Text("Wishlist"));
+        return WishlistScreen();
       case 4:
         return const AccountScreen();
       default:
