@@ -58,6 +58,20 @@ class WishlistRepo {
               .toList(),
         );
   }
+
+  Stream<List<WishlistItem>> getWishlistStream(String uid) {
+    return _firestore
+        .collection('users')
+        .doc(uid)
+        .collection('wishlist')
+        .orderBy('addedAt', descending: true)
+        .snapshots()
+        .map(
+          (snapshot) => snapshot.docs
+              .map((doc) => WishlistItem.fromMap(doc.data()))
+              .toList(),
+        );
+  }
 }
 
 Future<ProductModel?> getProductByDocId(String productDocId) async {

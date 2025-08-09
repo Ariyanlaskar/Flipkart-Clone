@@ -3,6 +3,7 @@ import 'package:flipkart_clone/features/wishlist/wishlist_provider.dart';
 
 import 'package:flipkart_clone/model/product_model.dart';
 import 'package:flipkart_clone/widget/custom_toast.dart';
+import 'package:flipkart_clone/widget/simple_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -108,18 +109,10 @@ class ProductDetailScreen extends ConsumerWidget {
                             await wishlistController.removeFromWishlist(
                               product.id,
                             );
-                            ScaffoldMessenger.of(ref.context).showSnackBar(
-                              const SnackBar(
-                                content: Text('Removed from wishlist'),
-                              ),
-                            );
+                            showToast('Removed from wishlist');
                           } else {
                             await wishlistController.addToWishlist(product.id);
-                            ScaffoldMessenger.of(ref.context).showSnackBar(
-                              const SnackBar(
-                                content: Text('Added to wishlist'),
-                              ),
-                            );
+                            showToast("Added to wishlist");
                           }
                         },
                       ),
