@@ -2,6 +2,9 @@ import 'package:flipkart_clone/controller/product_provider.dart';
 import 'package:flipkart_clone/model/product_model.dart';
 import 'package:flipkart_clone/screens/checkout_screen.dart';
 import 'package:flipkart_clone/screens/product_details_screen.dart';
+import 'package:flipkart_clone/widget/shimmer_loading_screen.dart';
+import 'package:flipkart_clone/widget/shimmers/cartitem_shimmer.dart';
+import 'package:flipkart_clone/widget/shimmers/itemShimer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -76,7 +79,7 @@ class CartScreen extends ConsumerWidget {
             ),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(child: CircularProgressIndicator());
+                return const Center(child: CartItemShimmer());
               }
 
               if (!snapshot.hasData || snapshot.data == null) {
@@ -165,11 +168,16 @@ class CartScreen extends ConsumerWidget {
                                                     (context, child, progress) {
                                                       if (progress == null)
                                                         return child;
-                                                      return const Center(
-                                                        child:
-                                                            CircularProgressIndicator(),
-                                                      );
+                                                      return Itemshimer();
                                                     },
+                                                // (context, child, progress) {
+                                                //   if (progress == null)
+                                                //     return child;
+                                                //   return const Center(
+                                                //     child:
+                                                //         CircularProgressIndicator(),
+                                                //   );
+                                                // },
                                                 errorBuilder:
                                                     (context, _, __) =>
                                                         const Icon(
@@ -366,7 +374,7 @@ class CartScreen extends ConsumerWidget {
             },
           );
         },
-        loading: () => const Center(child: CircularProgressIndicator()),
+        loading: () => const CircularProgressIndicator(),
         error: (err, _) => Center(child: Text('Error: $err')),
       ),
     );

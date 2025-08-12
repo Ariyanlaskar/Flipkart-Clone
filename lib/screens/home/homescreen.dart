@@ -3,6 +3,7 @@ import 'package:flipkart_clone/widget/appbar.dart';
 import 'package:flipkart_clone/widget/categorybar.dart';
 import 'package:flipkart_clone/widget/corousel_slider.dart';
 import 'package:flipkart_clone/widget/drawer.dart';
+import 'package:flipkart_clone/widget/shimmers/productcard_shimmer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flipkart_clone/controller/product_provider.dart';
@@ -36,7 +37,8 @@ class HomeContent extends ConsumerWidget {
                 scrollInfo.metrics.maxScrollExtent - 200 &&
             !productsState.isLoading &&
             productsState.hasMore) {
-          notifier.fetchNext();
+          Future(() => notifier.fetchNext());
+          // notifier.fetchNext();
         }
         return false;
       },
@@ -106,7 +108,14 @@ class DealsOfTheDaySection extends ConsumerWidget {
               itemCount: products.length,
               itemBuilder: (_, i) => ProductCard(product: products[i]),
             ),
-            loading: () => const Center(child: CircularProgressIndicator()),
+            loading: () => ListView.separated(
+              scrollDirection: Axis.horizontal,
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              itemCount: 4, // number of shimmer placeholders
+              separatorBuilder: (_, __) => const SizedBox(width: 12),
+              itemBuilder: (_, __) => const ProductCardShimmer(),
+            ),
+            // ProductCardShimmer(),
             error: (e, _) => Text("Error: $e"),
           ),
         ),
@@ -143,7 +152,21 @@ class ProductGridWithLoader extends ConsumerWidget {
           ),
           const SizedBox(height: 12),
           if (state.isLoading)
-            const Center(child: CircularProgressIndicator())
+            GridView.builder(
+              itemCount: 6, // Number of shimmer placeholders you want
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                childAspectRatio: 0.80,
+                crossAxisSpacing: 10,
+                mainAxisSpacing: 10,
+              ),
+              itemBuilder: (context, index) {
+                return const ProductCardShimmer();
+              },
+            )
+          // ProductCardShimmer()
           else if (!state.hasMore)
             const Padding(
               padding: EdgeInsets.all(12),

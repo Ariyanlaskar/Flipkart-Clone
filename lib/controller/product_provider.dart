@@ -95,7 +95,7 @@ class PaginatedProductNotifier extends StateNotifier<PaginatedProductState> {
 
   PaginatedProductNotifier(this.ref, this.category)
     : super(PaginatedProductState.initial()) {
-    fetchInitial();
+    Future.microtask(() => fetchInitial());
   }
 
   Future<void> fetchInitial() async {

@@ -2,7 +2,9 @@ import 'dart:ui';
 
 import 'package:flipkart_clone/features/wishlist/wishlist_repo.dart';
 import 'package:flipkart_clone/screens/account_screen.dart';
+import 'package:flipkart_clone/screens/category_screen.dart';
 import 'package:flipkart_clone/screens/home/homescreen.dart';
+import 'package:flipkart_clone/screens/search_screen.dart';
 import 'package:flipkart_clone/screens/wishlist_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -22,11 +24,11 @@ class _BottomNavScreenState extends ConsumerState<BottomNavScreen> {
       case 0:
         return const HomeScreen();
       case 1:
-        return const Center(child: Text("Categories"));
+        return const CategoryScreen();
       case 2:
-        return const Center(child: Text("Search"));
+        return const SearchScreen();
       case 3:
-        return WishlistScreen();
+        return const WishlistScreen();
       case 4:
         return const AccountScreen();
       default:
