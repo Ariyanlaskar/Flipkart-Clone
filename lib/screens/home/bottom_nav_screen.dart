@@ -1,19 +1,22 @@
+import 'dart:ui';
+
+import 'package:flipkart_clone/features/wishlist/wishlist_repo.dart';
 import 'package:flipkart_clone/screens/account_screen.dart';
 import 'package:flipkart_clone/screens/home/homescreen.dart';
 import 'package:flipkart_clone/screens/wishlist_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class BottomNavScreen extends StatefulWidget {
+class BottomNavScreen extends ConsumerStatefulWidget {
   const BottomNavScreen({super.key});
 
   @override
-  State<BottomNavScreen> createState() => _BottomNavScreenState();
+  ConsumerState<BottomNavScreen> createState() => _BottomNavScreenState();
 }
 
-class _BottomNavScreenState extends State<BottomNavScreen> {
+class _BottomNavScreenState extends ConsumerState<BottomNavScreen> {
   int _selectedIndex = 0;
 
-  // Use method to dynamically return screens so user state is always fresh
   Widget _getScreen(int index) {
     switch (index) {
       case 0:
@@ -39,6 +42,8 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final wishlistCount = ref.watch(wishlistCountProvider).value ?? 0;
+
     return Scaffold(
       body: _getScreen(_selectedIndex),
       bottomNavigationBar: BottomNavigationBar(
@@ -47,21 +52,55 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
         type: BottomNavigationBarType.fixed,
         selectedItemColor: Colors.blue[900],
         unselectedItemColor: Colors.grey[600],
-        items: const [
-          BottomNavigationBarItem(
+        items: [
+          const BottomNavigationBarItem(
             icon: Icon(Icons.home_outlined),
             label: 'Home',
           ),
-          BottomNavigationBarItem(
+          const BottomNavigationBarItem(
             icon: Icon(Icons.grid_view),
             label: 'Categories',
           ),
-          BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Search'),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.favorite_border),
-            label: 'Wishlist',
+          const BottomNavigationBarItem(
+            icon: Icon(Icons.search),
+            label: 'Search',
           ),
           BottomNavigationBarItem(
+            icon: Stack(
+              clipBehavior: Clip.none,
+              children: [
+                const Icon(Icons.favorite_border),
+                if (wishlistCount > 0)
+                  Positioned(
+                    right: -10,
+                    top: -6,
+                    child: Container(
+                      height: 18,
+                      width: 18,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: Colors.red,
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          color: Colors.white,
+                          width: 1.5, // white border like Flipkart
+                        ),
+                      ),
+                      child: Text(
+                        wishlistCount.toString(),
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 11,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+            label: 'Wishlist',
+          ),
+          const BottomNavigationBarItem(
             icon: Icon(Icons.person_outline),
             label: 'Account',
           ),

@@ -4,6 +4,7 @@ import 'package:flipkart_clone/features/wishlist/wishlist_model.dart';
 import 'package:flipkart_clone/features/wishlist/wishlist_provider.dart';
 import 'package:flipkart_clone/features/wishlist/wishlist_repo.dart';
 import 'package:flipkart_clone/model/product_model.dart';
+import 'package:flipkart_clone/screens/product_details_screen.dart';
 import 'package:flipkart_clone/widget/simple_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -29,6 +30,7 @@ class WishlistScreen extends ConsumerWidget {
       appBar: AppBar(
         title: const Text("Wishlist"),
         backgroundColor: const Color(0xFF2874F0),
+        foregroundColor: Colors.white,
         elevation: 3,
         centerTitle: true,
       ),
@@ -114,6 +116,13 @@ class WishlistScreen extends ConsumerWidget {
                                 borderRadius: BorderRadius.circular(16),
                                 onTap: () {
                                   // Optional: Navigate to product detail page
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          ProductDetailScreen(product: product),
+                                    ),
+                                  );
                                 },
                                 child: Padding(
                                   padding: const EdgeInsets.all(16),

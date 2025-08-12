@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flipkart_clone/controller/product_provider.dart';
 import 'package:flipkart_clone/model/product_model.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'wishlist_model.dart';
 
 class WishlistRepo {
@@ -84,3 +86,15 @@ Future<ProductModel?> getProductByDocId(String productDocId) async {
 
   return ProductModel.fromMap(docSnap.data()!);
 }
+
+final wishlistCountProvider = StreamProvider<int>((ref) {
+  final user = ref.watch(authStateProvider).value;
+  if (user == null) return Stream.value(0);
+
+  return FirebaseFirestore.instance
+      .collection('users')
+      .doc(user.uid)
+      .collection('wishlist')
+      .snapshots()
+      .map((snapshot) => snapshot.docs.length);
+});

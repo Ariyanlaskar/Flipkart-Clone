@@ -15,10 +15,13 @@ class SearchScreen extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color(0xFF2874F0),
+        foregroundColor: Colors.white,
         title: TextField(
+          style: TextStyle(color: Colors.white),
           autofocus: true,
           decoration: const InputDecoration(
             hintText: 'Search for products...',
+            hintStyle: TextStyle(color: Colors.white),
             border: InputBorder.none,
           ),
           onChanged: (value) =>

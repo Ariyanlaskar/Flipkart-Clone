@@ -2,6 +2,7 @@ import 'package:flipkart_clone/controller/product_provider.dart';
 import 'package:flipkart_clone/features/wishlist/wishlist_provider.dart';
 
 import 'package:flipkart_clone/model/product_model.dart';
+import 'package:flipkart_clone/screens/buynow_checkout_screen.dart';
 import 'package:flipkart_clone/widget/custom_toast.dart';
 import 'package:flipkart_clone/widget/simple_toast.dart';
 import 'package:flutter/material.dart';
@@ -45,7 +46,7 @@ class ProductDetailScreen extends ConsumerWidget {
           );
         },
       ),
-      bottomNavigationBar: _buildBottomBar(context),
+      bottomNavigationBar: _buildBottomBar(context, product),
     );
   }
 
@@ -294,7 +295,7 @@ class ProductDetailScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildBottomBar(BuildContext context) {
+  Widget _buildBottomBar(BuildContext context, ProductModel p) {
     final screenWidth = MediaQuery.of(context).size.width;
     final buttonHeight = screenWidth * 0.14;
 
@@ -347,7 +348,7 @@ class ProductDetailScreen extends ConsumerWidget {
                         //   textColor: Colors.white,
                         //   fontSize: 14.0,
                         // );
-                        showCustomToast(context, "Added to cart");
+                        showCustomToast("Added to cart");
                       },
                     ),
                   ),
@@ -367,7 +368,15 @@ class ProductDetailScreen extends ConsumerWidget {
                           borderRadius: BorderRadius.zero,
                         ),
                       ),
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                BuyNowCheckoutScreen(productData: p),
+                          ),
+                        );
+                      },
                     ),
                   ),
                 ],

@@ -15,6 +15,7 @@ import 'package:flipkart_clone/screens/wishlist_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
@@ -29,6 +30,7 @@ class MyApp extends ConsumerWidget {
     final splash = ref.watch(splashControllerProvider);
 
     return MaterialApp(
+      navigatorKey: navigatorKey,
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         scaffoldBackgroundColor: const Color.fromARGB(255, 237, 237, 237),
@@ -43,6 +45,7 @@ class MyApp extends ConsumerWidget {
         AppRoutes.addresses: (context) => const AddressScreen(),
         AppRoutes.support: (context) => const SupportScreen(),
         AppRoutes.about: (context) => const AboutScreen(),
+
         // Add other routes like orders, wishlist, addresses, support, about
       },
       onUnknownRoute: (settings) => MaterialPageRoute(
