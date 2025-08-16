@@ -1,0 +1,53 @@
+[
+    {
+        "category": "Appliances",
+        "discount": 25,
+        "id": "29",
+        "imageURL": "https://rukminim2.flixcart.com/image/612/612/kdhphu80/refrigerator-new/q/f/w/na-258l-frost-free-double-door-3-star-convertible-260tds3-rmwh-original-imafud45kbgw6wnx.jpeg?q=70",
+        "mrp": 31990,
+        "offers": [
+            "Extra \u20b91000 off on UPI transactions",
+            "No Cost EMI available",
+            "Exchange offer up to \u20b95000"
+        ],
+        "price": 23990,
+        "ratings": 4.4,
+        "reviews": 2153,
+        "specification": "258 L | Frost Free Double Door | 3 Star Rating | Convertible | Toughened Glass Shelves",
+        "title": "Samsung 258 L 3 Star Frost Free Double Door Refrigerator"
+    },
+    {
+        "category": "Appliances",
+        "discount": 35,
+        "id": "30",
+        "imageURL": "https://rukminim2.flixcart.com/image/612/612/xif0q/washing-machine-new/y/8/3/-original-imagzrfhtjptf6z8.jpeg?q=70",
+        "mrp": 25999,
+        "offers": [
+            "Flat \u20b9500 off on first UPI transaction",
+            "Exchange offer up to \u20b94000",
+            "Free installation & demo"
+        ],
+        "price": 16999,
+        "ratings": 4.2,
+        "reviews": 1324,
+        "specification": "7 kg | Fully Automatic Front Load | 1200 RPM | Digital Inverter Motor",
+        "title": "LG 7 kg Fully Automatic Front Load Washing Machine"
+    },
+    {
+        "category": "Appliances",
+        "discount": 40,
+        "id": "31",
+        "imageURL": "https://rukminim2.flixcart.com/image/612/612/xif0q/microwave-new/v/u/u/-original-imagz2hy4tjgnhft.jpeg?q=70",
+        "mrp": 10990,
+        "offers": [
+            "10% off on Axis Bank Credit Cards",
+            "Free baking accessories kit",
+            "Exchange offer up to \u20b91500"
+        ],
+        "price": 6590,
+        "ratings": 4.3,
+        "reviews": 847,
+        "specification": "28 L | Convection Microwave Oven | Touch Key Pad | Child Lock",
+        "title": "IFB 28 L Convection Microwave Oven"
+    }
+]

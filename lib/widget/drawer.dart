@@ -1,3 +1,4 @@
+import 'package:flipkart_clone/controller/upload_product.dart';
 import 'package:flutter/material.dart';
 
 class DrawerWidget extends StatelessWidget {
@@ -48,6 +49,15 @@ class DrawerWidget extends StatelessWidget {
             title: const Text('Logout'),
             onTap: () {
               // handle logout
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.logout),
+            title: const Text('Upload Data'),
+            onTap: () async {
+              // handle logout
+
+              await uploadProductsToFirestore();
             },
           ),
         ],

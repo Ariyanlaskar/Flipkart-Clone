@@ -9,13 +9,12 @@ class LazyProductGrid extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    print("lazy loaded");
     final selectedCategory = ref.watch(selectedCategoryProvider);
     final categoryKey = selectedCategory ?? 'ALL';
 
     final productsState = ref.watch(paginatedProductsProvider(categoryKey));
     ref.read(paginatedProductsProvider(categoryKey).notifier);
-
-    print("lazy loaded");
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -38,7 +37,6 @@ class LazyProductGrid extends ConsumerWidget {
 
           const SizedBox(height: 12),
 
-          // ✅ Correct state-based footer (loading or done)
           if (productsState.isLoading)
             const Center(child: CircularProgressIndicator())
           else if (!productsState.hasMore)
@@ -46,7 +44,7 @@ class LazyProductGrid extends ConsumerWidget {
               padding: EdgeInsets.symmetric(vertical: 12.0),
               child: Center(
                 child: Text(
-                  "✅ All products loaded",
+                  "All products loaded",
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     color: Colors.green,

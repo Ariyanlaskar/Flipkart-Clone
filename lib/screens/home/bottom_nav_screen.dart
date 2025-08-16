@@ -24,7 +24,7 @@ class _BottomNavScreenState extends ConsumerState<BottomNavScreen> {
       case 0:
         return const HomeScreen();
       case 1:
-        return const CategoryScreen();
+        return CategoriesScreen();
       case 2:
         return const SearchScreen();
       case 3:
