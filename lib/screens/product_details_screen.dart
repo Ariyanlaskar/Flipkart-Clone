@@ -370,7 +370,7 @@ class ProductDetailScreen extends ConsumerWidget {
                           context,
                           MaterialPageRoute(
                             builder: (context) =>
-                                BuyNowCheckoutScreen(productData: p),
+                                CheckoutScreen(product: product),
                           ),
                         );
                       },

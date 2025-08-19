@@ -39,7 +39,7 @@ class MyApp extends ConsumerWidget {
         AppRoutes.login: (context) => const LoginScreen(),
         AppRoutes.home: (context) => const BottomNavScreen(),
         AppRoutes.editProfile: (context) => const EditProfileScreen(),
-        AppRoutes.orders: (context) => const OrderScreen(),
+        AppRoutes.orders: (context) => const OrdersScreen(),
         AppRoutes.wishlist: (context) => WishlistScreen(),
         AppRoutes.addresses: (context) => const AddressScreen(),
         AppRoutes.support: (context) => const HelpSupportScreen(),

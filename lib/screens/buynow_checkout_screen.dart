@@ -1,290 +1,306 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flipkart_clone/model/product_model.dart';
+import 'package:flipkart_clone/screens/order_success.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flipkart_clone/features/order/order_controller.dart';
+import 'package:flipkart_clone/model/product_model.dart';
 
-class BuyNowCheckoutScreen extends StatefulWidget {
-  final ProductModel productData;
-  final bool isFromCart;
+/// ✅ Local provider for selected payment option
+final selectedPaymentProvider = StateProvider<String?>((ref) => null);
 
-  const BuyNowCheckoutScreen({
-    super.key,
-    required this.productData,
-    this.isFromCart = false,
-  });
+class CheckoutScreen extends ConsumerWidget {
+  final ProductModel product;
 
-  @override
-  State<BuyNowCheckoutScreen> createState() => _BuyNowCheckoutScreenState();
-}
-
-class _BuyNowCheckoutScreenState extends State<BuyNowCheckoutScreen> {
-  String? address;
-  String? selectedAddressId;
-  bool isLoading = false;
-  bool isAddressLoading = true;
+  const CheckoutScreen({super.key, required this.product});
 
   @override
-  void initState() {
-    super.initState();
-    _fetchDefaultAddress();
-  }
+  Widget build(BuildContext context, WidgetRef ref) {
+    final size = MediaQuery.of(context).size;
+    final selectedPayment = ref.watch(selectedPaymentProvider);
 
-  Future<void> _fetchDefaultAddress() async {
-    final uid = FirebaseAuth.instance.currentUser?.uid;
-    if (uid != null) {
-      final userDoc = await FirebaseFirestore.instance
-          .collection('users')
-          .doc(uid)
-          .get();
+    // ✅ dynamic price calculation
+    double itemTotal = product.price;
+    double discountAmount = (product.price * product.discount) / 100;
+    double totalAmount = itemTotal - discountAmount;
 
-      if (userDoc.exists && userDoc.data()?['defaultAddress'] != null) {
-        final addressId = userDoc['defaultAddress'];
-        final addressDoc = await FirebaseFirestore.instance
-            .collection('users')
-            .doc(uid)
-            .collection('addresses')
-            .doc(addressId)
-            .get();
+    final paymentOptions = [
+      {"title": "UPI", "subtitle": "Google Pay, PhonePe, Paytm & more"},
+      {
+        "title": "Credit / Debit Card",
+        "subtitle": "Visa, MasterCard, RuPay, etc.",
+      },
+      {"title": "Net Banking", "subtitle": "All major banks supported"},
+      {
+        "title": "Cash on Delivery",
+        "subtitle": "Pay when you receive the order",
+      },
+      {"title": "Wallets", "subtitle": "Paytm, PhonePe Wallet & more"},
+    ];
 
-        if (addressDoc.exists) {
-          setState(() {
-            address = addressDoc['fullAddress'];
-            selectedAddressId = addressId;
-          });
-        }
-      }
-    }
-    setState(() => isAddressLoading = false);
-  }
-
-  Future<void> _selectAddress() async {
-    final uid = FirebaseAuth.instance.currentUser?.uid;
-    if (uid == null) return;
-
-    final snapshot = await FirebaseFirestore.instance
-        .collection('users')
-        .doc(uid)
-        .collection('addresses')
-        .get();
-
-    showModalBottomSheet(
-      context: context,
-      builder: (context) {
-        return SafeArea(
-          child: ListView(
-            shrinkWrap: true,
+    return SafeArea(
+      top: false,
+      bottom: true,
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text("Checkout"),
+          backgroundColor: Colors.blue,
+          elevation: 0,
+        ),
+        body: SingleChildScrollView(
+          padding: const EdgeInsets.all(12),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              ...snapshot.docs.map((doc) {
-                return ListTile(
-                  title: Text(doc['fullAddress']),
-                  trailing: IconButton(
-                    icon: const Icon(Icons.delete, color: Colors.red),
-                    onPressed: () async {
-                      await doc.reference.delete();
-                      if (selectedAddressId == doc.id) {
-                        setState(() {
-                          address = null;
-                          selectedAddressId = null;
-                        });
-                      }
-                      Navigator.pop(context);
+              /// Address Section
+              Card(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(12),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Icon(
+                        Icons.location_on,
+                        color: Colors.blue,
+                        size: 28,
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: const [
+                            Text(
+                              "Deliver to: Ariyan Laskar",
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 14,
+                              ),
+                            ),
+                            SizedBox(height: 4),
+                            Text(
+                              "Dummy Address, Pune, Maharashtra - 411001",
+                              style: TextStyle(
+                                color: Colors.black87,
+                                fontSize: 13,
+                              ),
+                            ),
+                            SizedBox(height: 4),
+                            Text(
+                              "Phone: 7002508034",
+                              style: TextStyle(
+                                color: Colors.black54,
+                                fontSize: 13,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          // later add address change logic
+                        },
+                        child: const Text(
+                          "Change",
+                          style: TextStyle(color: Colors.blue),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+
+              const SizedBox(height: 16),
+
+              /// Product Details Card
+              Card(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: ListTile(
+                  leading: Image.network(
+                    product.imageURL,
+                    width: 50,
+                    height: 50,
+                    fit: BoxFit.contain,
+                    errorBuilder: (context, error, stack) =>
+                        const Icon(Icons.broken_image),
+                  ),
+                  title: Text(
+                    product.title,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(fontSize: 14),
+                  ),
+                  subtitle: Text("₹${product.price.toStringAsFixed(0)}"),
+                  trailing: Text(
+                    "${product.discount.toStringAsFixed(0)}% OFF",
+                    style: const TextStyle(color: Colors.green),
+                  ),
+                ),
+              ),
+
+              const SizedBox(height: 16),
+
+              /// Order Summary
+              Text(
+                "Order Summary",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: size.width < 400 ? 15 : 16,
+                ),
+              ),
+              const SizedBox(height: 8),
+              Card(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(12),
+                  child: Column(
+                    children: [
+                      summaryRow(
+                        "Item Total",
+                        "₹${itemTotal.toStringAsFixed(0)}",
+                      ),
+                      summaryRow(
+                        "Discount",
+                        "-₹${discountAmount.toStringAsFixed(0)}",
+                        color: Colors.green,
+                      ),
+                      summaryRow(
+                        "Delivery Charges",
+                        "Free",
+                        color: Colors.green,
+                      ),
+                      const Divider(),
+                      summaryRow(
+                        "Total Amount",
+                        "₹${totalAmount.toStringAsFixed(0)}",
+                        isBold: true,
+                        fontSize: 16,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+
+              const SizedBox(height: 16),
+
+              /// Payment Options
+              Text(
+                "Payment Options",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: size.width < 400 ? 15 : 16,
+                ),
+              ),
+              const SizedBox(height: 8),
+              ...paymentOptions.map((option) {
+                return Card(
+                  margin: const EdgeInsets.symmetric(vertical: 4),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: RadioListTile<String>(
+                    value: option["title"]!,
+                    groupValue: selectedPayment,
+                    activeColor: Colors.blue,
+                    title: Text(
+                      option["title"]!,
+                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    subtitle: Text(option["subtitle"]!),
+                    onChanged: (val) {
+                      ref.read(selectedPaymentProvider.notifier).state = val;
                     },
                   ),
-                  onTap: () async {
-                    await FirebaseFirestore.instance
-                        .collection('users')
-                        .doc(uid)
-                        .update({'defaultAddress': doc.id});
-                    setState(() {
-                      address = doc['fullAddress'];
-                      selectedAddressId = doc.id;
-                    });
-                    Navigator.pop(context);
-                  },
                 );
-              }),
-              ListTile(
-                leading: const Icon(Icons.add_location_alt, color: Colors.blue),
-                title: const Text("Add New Address"),
-                onTap: () {
-                  Navigator.pop(context);
-                  _addNewAddress();
-                },
-              ),
+              }).toList(),
+
+              const SizedBox(height: 70),
             ],
           ),
-        );
-      },
-    );
-  }
-
-  Future<void> _addNewAddress() async {
-    final uid = FirebaseAuth.instance.currentUser?.uid;
-    if (uid == null) return;
-
-    String newAddress = "";
-    await showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text("Add New Address"),
-        content: TextField(
-          decoration: const InputDecoration(hintText: "Enter full address"),
-          onChanged: (value) => newAddress = value,
         ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text("Cancel"),
+
+        /// Bottom Buy Now Button
+        bottomNavigationBar: Container(
+          padding: const EdgeInsets.all(12),
+          color: Colors.white,
+          child: ElevatedButton(
+            onPressed: selectedPayment == null
+                ? null
+                : () async {
+                    await ref
+                        .read(orderControllerProvider.notifier)
+                        .placeOrder(
+                          productId: product.id,
+                          title: product.title,
+                          imageURL: product.imageURL,
+                          price: product.price,
+                          quantity: 1,
+                          paymentMethod: selectedPayment!,
+                        );
+
+                    // ScaffoldMessenger.of(context).showSnackBar(
+                    //   SnackBar(
+                    //     content: Text(
+                    //       "Order placed for ${product.title} with $selectedPayment!",
+                    //     ),
+                    //   ),
+                    // );
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => OrderSuccessScreen(
+                          productTitle: product.title,
+                          paymentMethod: selectedPayment,
+                        ),
+                      ),
+                    );
+
+                    // Navigator.pushNamed(context, '/orders');
+                  },
+            child: const Text(
+              "Place Order",
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            ),
           ),
-          ElevatedButton(
-            onPressed: () async {
-              if (newAddress.trim().isNotEmpty) {
-                final addressRef = FirebaseFirestore.instance
-                    .collection('users')
-                    .doc(uid)
-                    .collection('addresses')
-                    .doc();
-                await addressRef.set({'fullAddress': newAddress.trim()});
-                await FirebaseFirestore.instance
-                    .collection('users')
-                    .doc(uid)
-                    .update({'defaultAddress': addressRef.id});
-                setState(() {
-                  address = newAddress.trim();
-                  selectedAddressId = addressRef.id;
-                });
-              }
-              Navigator.pop(context);
-            },
-            child: const Text("Save"),
-          ),
-        ],
+        ),
       ),
     );
   }
 
-  Future<void> _placeOrder() async {
-    final uid = FirebaseAuth.instance.currentUser?.uid;
-    if (uid == null || selectedAddressId == null) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text("Please select an address")));
-      return;
-    }
-
-    setState(() => isLoading = true);
-
-    final orderId = FirebaseFirestore.instance.collection('orders').doc().id;
-    final orderData = {
-      'orderId': orderId,
-      'userId': uid,
-      'products': [widget.productData],
-      'totalAmount': widget.productData.price,
-      'address': address,
-      'status': 'Pending',
-      'placedAt': FieldValue.serverTimestamp(),
-    };
-
-    await FirebaseFirestore.instance
-        .collection('orders')
-        .doc(orderId)
-        .set(orderData);
-
-    if (widget.isFromCart) {
-      final cartRef = FirebaseFirestore.instance
-          .collection('users')
-          .doc(uid)
-          .collection('cart');
-      final snapshot = await cartRef.get();
-      for (var doc in snapshot.docs) {
-        await doc.reference.delete();
-      }
-    }
-
-    setState(() => isLoading = false);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-    final isTablet = size.width > 600;
-
-    return Scaffold(
-      appBar: AppBar(title: const Text("Checkout")),
-      body: isLoading
-          ? const Center(child: CircularProgressIndicator())
-          : Padding(
-              padding: EdgeInsets.all(isTablet ? 20 : 10),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "Delivery Address",
-                    style: Theme.of(context).textTheme.titleMedium,
-                  ),
-                  const SizedBox(height: 8),
-                  InkWell(
-                    onTap: _selectAddress,
-                    child: Container(
-                      width: double.infinity,
-                      padding: EdgeInsets.all(isTablet ? 16 : 12),
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey.shade300),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: isAddressLoading
-                          ? const Text("Loading address...")
-                          : Text(address ?? "Tap to select address"),
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  Text(
-                    "Order Summary",
-                    style: Theme.of(context).textTheme.titleMedium,
-                  ),
-                  const SizedBox(height: 8),
-                  Row(
-                    children: [
-                      Image.network(
-                        widget.productData.imageURL,
-                        width: isTablet ? 120 : 80,
-                        height: isTablet ? 120 : 80,
-                        fit: BoxFit.cover,
-                      ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: Text(
-                          widget.productData.title,
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                      Text(
-                        "₹${widget.productData.price}",
-                        style: const TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                    ],
-                  ),
-                  const Spacer(),
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      onPressed: _placeOrder,
-                      style: ElevatedButton.styleFrom(
-                        padding: EdgeInsets.symmetric(
-                          vertical: isTablet ? 18 : 14,
-                        ),
-                        backgroundColor: Colors.blue,
-                      ),
-                      child: const Text(
-                        "Place Order",
-                        style: TextStyle(fontSize: 16),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+  /// helper widget
+  Widget summaryRow(
+    String title,
+    String value, {
+    bool isBold = false,
+    double fontSize = 14,
+    Color? color,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 6),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            title,
+            style: TextStyle(
+              fontSize: fontSize,
+              fontWeight: isBold ? FontWeight.bold : FontWeight.normal,
             ),
+          ),
+          Text(
+            value,
+            style: TextStyle(
+              fontSize: fontSize,
+              fontWeight: isBold ? FontWeight.bold : FontWeight.normal,
+              color: color,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
