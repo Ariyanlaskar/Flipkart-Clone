@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class CategoriesScreen extends ConsumerWidget {
   final List<Map<String, String>> categories = [
+    {'name': 'For You', 'icon': 'assets/images/cat/foryou.png'},
     {'name': 'Mobiles', 'icon': 'assets/images/cat/mobile_transparent.png'},
     {
       'name': 'Electronics',
@@ -15,8 +16,16 @@ class CategoriesScreen extends ConsumerWidget {
       'name': 'Appliances',
       'icon': 'assets/images/cat/appliances_transparent.png',
     },
-    {'name': 'bikes', 'icon': 'assets/images/cat/smartgadgets_transparent.png'},
+    {'name': 'Bikes', 'icon': 'assets/images/cat/smartgadgets_transparent.png'},
     {'name': 'Sports', 'icon': 'assets/images/cat/sports_transparent.png'},
+    {
+      'name': 'Smart Gadgets',
+      'icon': 'assets/images/cat/smartgadgets_transparent.png',
+    },
+    {
+      'name': 'Food & Health',
+      'icon': 'assets/images/cat/foodhealth_transparent.png',
+    },
   ];
 
   @override

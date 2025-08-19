@@ -11,7 +11,6 @@ class ProductCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        print("tapped card");
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -36,24 +35,30 @@ class ProductCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
+            /// 🔹 Image Section
             Padding(
-              padding: const EdgeInsets.all(20.0),
+              padding: const EdgeInsets.all(12.0),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(6),
                 child: Hero(
-                  tag: product.imageURL,
-                  child: Image.network(
-                    product.imageURL,
+                  tag: product.id,
+                  child: SizedBox(
                     height: 100,
-                    width: double.infinity,
-                    fit: BoxFit.contain,
-                    errorBuilder: (context, error, stackTrace) =>
-                        const Icon(Icons.broken_image),
+                    width: 100, //
+                    child: Image.network(
+                      product.imageURL,
+                      fit: BoxFit.contain,
+                      errorBuilder: (context, error, stackTrace) =>
+                          const Icon(Icons.broken_image, size: 60),
+                    ),
                   ),
                 ),
               ),
             ),
-            const SizedBox(height: 10),
+
+            const SizedBox(height: 8),
+
+            /// 🔹 Title
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
               child: Text(
@@ -64,6 +69,8 @@ class ProductCard extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
               ),
             ),
+
+            /// 🔹 Price
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
               child: Text(
@@ -74,6 +81,8 @@ class ProductCard extends StatelessWidget {
                 ),
               ),
             ),
+
+            /// 🔹 Discount
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8),
               child: Text(
@@ -81,6 +90,7 @@ class ProductCard extends StatelessWidget {
                 style: const TextStyle(color: Colors.green, fontSize: 12),
               ),
             ),
+
             const SizedBox(height: 8),
           ],
         ),

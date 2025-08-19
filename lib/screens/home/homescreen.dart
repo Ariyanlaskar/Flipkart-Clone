@@ -101,15 +101,20 @@ class DealsOfTheDaySection extends ConsumerWidget {
           ),
         ),
         SizedBox(
-          height: 220,
+          height: 280,
           child: dealsAsync.when(
             data: (products) => ListView.builder(
               scrollDirection: Axis.horizontal,
+              physics: const BouncingScrollPhysics(),
+              shrinkWrap: true,
+              primary: false,
               itemCount: products.length,
               itemBuilder: (_, i) => ProductCard(product: products[i]),
             ),
             loading: () => ListView.separated(
               scrollDirection: Axis.horizontal,
+              shrinkWrap: true,
+              primary: false,
               padding: const EdgeInsets.symmetric(horizontal: 16),
               itemCount: 4, // number of shimmer placeholders
               separatorBuilder: (_, __) => const SizedBox(width: 12),
@@ -132,13 +137,16 @@ class ProductGridWithLoader extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(paginatedProductsProvider(categoryKey));
 
+    // We’ll return a Column with one grid + conditional widgets
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8),
       child: Column(
         children: [
+          // Main product grid
           GridView.builder(
             itemCount: state.products.length,
             shrinkWrap: true,
+            primary: false,
             physics: const NeverScrollableScrollPhysics(),
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
@@ -150,23 +158,29 @@ class ProductGridWithLoader extends ConsumerWidget {
               return ProductCard(product: state.products[index]);
             },
           ),
+
           const SizedBox(height: 12),
+
+          // shimmer loader below the grid
           if (state.isLoading)
-            GridView.builder(
-              itemCount: 6, // Number of shimmer placeholders you want
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                childAspectRatio: 0.80,
-                crossAxisSpacing: 10,
-                mainAxisSpacing: 10,
+            SizedBox(
+              height: 250, // give bounded height
+              child: GridView.builder(
+                itemCount: 6,
+                shrinkWrap: true,
+                primary: false,
+                physics: const NeverScrollableScrollPhysics(),
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  childAspectRatio: 0.80,
+                  crossAxisSpacing: 10,
+                  mainAxisSpacing: 10,
+                ),
+                itemBuilder: (context, index) {
+                  return const ProductCardShimmer();
+                },
               ),
-              itemBuilder: (context, index) {
-                return const ProductCardShimmer();
-              },
             )
-          // ProductCardShimmer()
           else if (!state.hasMore)
             const Padding(
               padding: EdgeInsets.all(12),

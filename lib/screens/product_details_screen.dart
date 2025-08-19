@@ -72,14 +72,11 @@ class ProductDetailScreen extends ConsumerWidget {
               const SizedBox(height: 20),
               Stack(
                 children: [
-                  Hero(
-                    tag: product.imageURL,
-                    child: Image.network(
-                      product.imageURL,
-                      height: screenWidth * 0.63,
-                      fit: BoxFit.contain,
-                      width: screenWidth,
-                    ),
+                  Image.network(
+                    product.imageURL,
+                    height: screenWidth * 0.63,
+                    fit: BoxFit.contain,
+                    width: screenWidth,
                   ),
                   Positioned(
                     top: 10,

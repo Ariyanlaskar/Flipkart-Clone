@@ -1,53 +1,376 @@
 [
-    {
-        "category": "Appliances",
-        "discount": 25,
-        "id": "29",
-        "imageURL": "https://rukminim2.flixcart.com/image/612/612/kdhphu80/refrigerator-new/q/f/w/na-258l-frost-free-double-door-3-star-convertible-260tds3-rmwh-original-imafud45kbgw6wnx.jpeg?q=70",
-        "mrp": 31990,
-        "offers": [
-            "Extra \u20b91000 off on UPI transactions",
-            "No Cost EMI available",
-            "Exchange offer up to \u20b95000"
-        ],
-        "price": 23990,
-        "ratings": 4.4,
-        "reviews": 2153,
-        "specification": "258 L | Frost Free Double Door | 3 Star Rating | Convertible | Toughened Glass Shelves",
-        "title": "Samsung 258 L 3 Star Frost Free Double Door Refrigerator"
-    },
-    {
-        "category": "Appliances",
-        "discount": 35,
-        "id": "30",
-        "imageURL": "https://rukminim2.flixcart.com/image/612/612/xif0q/washing-machine-new/y/8/3/-original-imagzrfhtjptf6z8.jpeg?q=70",
-        "mrp": 25999,
-        "offers": [
-            "Flat \u20b9500 off on first UPI transaction",
-            "Exchange offer up to \u20b94000",
-            "Free installation & demo"
-        ],
-        "price": 16999,
-        "ratings": 4.2,
-        "reviews": 1324,
-        "specification": "7 kg | Fully Automatic Front Load | 1200 RPM | Digital Inverter Motor",
-        "title": "LG 7 kg Fully Automatic Front Load Washing Machine"
-    },
-    {
-        "category": "Appliances",
-        "discount": 40,
-        "id": "31",
-        "imageURL": "https://rukminim2.flixcart.com/image/612/612/xif0q/microwave-new/v/u/u/-original-imagz2hy4tjgnhft.jpeg?q=70",
-        "mrp": 10990,
-        "offers": [
-            "10% off on Axis Bank Credit Cards",
-            "Free baking accessories kit",
-            "Exchange offer up to \u20b91500"
-        ],
-        "price": 6590,
-        "ratings": 4.3,
-        "reviews": 847,
-        "specification": "28 L | Convection Microwave Oven | Touch Key Pad | Child Lock",
-        "title": "IFB 28 L Convection Microwave Oven"
-    }
+  {
+    "category": "Electronics",
+    "discount": 30,
+    "id": "40",
+    "imageURL": "https://rukminim2.flixcart.com/image/312/312/xif0q/mobile/o/w/q/-original-imagnrhkjwg8ngzh.jpeg?q=70",
+    "mrp": 32999,
+    "offers": [
+      "Flat ₹3000 off with Axis Bank Credit Cards",
+      "No Cost EMI from ₹2,749/month",
+      "Exchange offer up to ₹12,000"
+    ],
+    "price": 22999,
+    "ratings": 4.6,
+    "reviews": 5231,
+    "specification": "6.6-inch AMOLED Display | 5000mAh Battery | 108MP Camera | Snapdragon 7 Gen 1",
+    "title": "Samsung Galaxy A54 5G (128 GB)"
+  },
+  {
+    "category": "Electronics",
+    "discount": 45,
+    "id": "41",
+    "imageURL": "https://rukminim2.flixcart.com/image/312/312/xif0q/computer/i/v/o/15-eh3036au-thin-and-light-laptop-hp-original-imagypz4ahkqptam.jpeg?q=70",
+    "mrp": 72999,
+    "offers": [
+      "Flat ₹5000 off on HDFC Bank Cards",
+      "No Cost EMI up to 12 months",
+      "Exchange offer up to ₹15,000"
+    ],
+    "price": 39999,
+    "ratings": 4.5,
+    "reviews": 2124,
+    "specification": "15.6-inch FHD | Intel Core i5 12th Gen | 16GB RAM | 512GB SSD | Windows 11",
+    "title": "HP Pavilion 15 Core i5 12th Gen Laptop"
+  },
+  {
+    "category": "Electronics",
+    "discount": 50,
+    "id": "42",
+    "imageURL": "https://rukminim2.flixcart.com/image/612/612/xif0q/headphone/u/2/n/-original-imahfcgx3as2tgk7.jpeg?q=70",
+    "mrp": 5999,
+    "offers": [
+      "Extra ₹500 off on prepaid orders",
+      "Free Spotify Premium for 3 months",
+      "7-day replacement guarantee"
+    ],
+    "price": 2999,
+    "ratings": 4.4,
+    "reviews": 3561,
+    "specification": "Bluetooth 5.3 | Active Noise Cancellation | 40 Hours Playback | Type-C Fast Charging",
+    "title": "Sony WH-CH720N Wireless Headphones"
+  },
+  {
+    "category": "Electronics",
+    "discount": 35,
+    "id": "43",
+    "imageURL": "https://rukminim2.flixcart.com/image/312/312/xif0q/tablet/5/3/l/rmp2204-realme-original-imagrhcqvxhqqcwf.jpeg?q=70",
+    "mrp": 21999,
+    "offers": [
+      "Flat ₹2000 off with Axis Bank Cards",
+      "No Cost EMI available",
+      "Free 1 year screen replacement"
+    ],
+    "price": 14299,
+    "ratings": 4.3,
+    "reviews": 1890,
+    "specification": "10.5-inch FHD Display | 8GB RAM | 128GB Storage | Dolby Atmos Quad Speakers",
+    "title": "Realme Pad X WiFi+4G Tablet"
+  },
+  {
+    "category": "Home & Furniture",
+    "discount": 50,
+    "id": "44",
+    "imageURL": "https://rukminim2.flixcart.com/image/612/612/xif0q/sofa-sectional/h/1/f/symmetrical-76-beige-198-velvet-no-45-g-004-groovecraft-76-beige-original-imahejyyxychw7s9.jpeg?q=70",
+    "mrp": 35999,
+    "offers": [
+      "Extra ₹2000 off on prepaid orders",
+      "No Cost EMI available",
+      "Free installation included"
+    ],
+    "price": 17999,
+    "ratings": 4.3,
+    "reviews": 1278,
+    "specification": "L-Shaped Sofa | 6 Seater | Fabric Upholstery | Wooden Frame",
+    "title": "Wakefit L-Shaped 6 Seater Fabric Sofa"
+  },
+  {
+    "category": "Home & Furniture",
+    "discount": 40,
+    "id": "45",
+    "imageURL": "https://rukminim2.flixcart.com/image/612/612/xif0q/wardrobe-closet/w/a/r/-original-imahc4ygtfkwc2me.jpeg?q=70",
+    "mrp": 21999,
+    "offers": [
+      "Flat ₹1500 off on Axis Bank Cards",
+      "Free delivery & installation",
+      "Exchange offer available"
+    ],
+    "price": 13199,
+    "ratings": 4.2,
+    "reviews": 942,
+    "specification": "3 Door Wardrobe | Engineered Wood | Matte Finish | With Mirror",
+    "title": "Nilkamal 3-Door Engineered Wood Wardrobe"
+  },
+  {
+    "category": "Home & Furniture",
+    "discount": 45,
+    "id": "46",
+    "imageURL": "https://rukminim2.flixcart.com/image/612/612/xif0q/dining-set/w/c/d/160-beige-0-0-particle-board-57-6-rectangle-49-98-19-2-75-6-original-imahdfy9bauv6zzk.jpeg?q=70",
+    "mrp": 25999,
+    "offers": [
+      "Extra 10% off on HDFC Cards",
+      "No Cost EMI up to 9 months",
+      "Free delivery available"
+    ],
+    "price": 14299,
+    "ratings": 4.4,
+    "reviews": 689,
+    "specification": "6-Seater Dining Set | Sheesham Wood | Cushioned Chairs | Dark Walnut Finish",
+    "title": "HomeTown Solid Wood 6-Seater Dining Set"
+  },
+  {
+    "category": "Home & Furniture",
+    "discount": 55,
+    "id": "47",
+    "imageURL": "https://rukminim2.flixcart.com/image/612/612/xif0q/bed/2/y/n/queen-202-4-walnut-no-158-particle-board-yes-120-56101515sd00664-original-imah8yxeyk7g3cqx.jpeg?q=70",
+    "mrp": 28999,
+    "offers": [
+      "Flat ₹2000 off on Credit Card EMI",
+      "Exchange offer up to ₹5000",
+      "Free assembly included"
+    ],
+    "price": 12999,
+    "ratings": 4.1,
+    "reviews": 754,
+    "specification": "Queen Size Bed | Engineered Wood | Hydraulic Storage | Walnut Finish",
+    "title": "Godrej Interio Queen Size Hydraulic Storage Bed"
+  },
+  {
+    "category": "Home & Furniture",
+    "discount": 50,
+    "id": "44",
+    "imageURL": "https://rukminim2.flixcart.com/image/612/612/xif0q/sofa-sectional/6/d/v/right-facing-78-7-dark-blue-and-cloud-grey-127-polyester-no-117-original-imah3xq4jrzxbfcq.jpeg?q=70",
+    "mrp": 35999,
+    "offers": [
+      "Extra ₹2000 off on prepaid orders",
+      "No Cost EMI available",
+      "Free installation included"
+    ],
+    "price": 17999,
+    "ratings": 4.3,
+    "reviews": 1278,
+    "specification": "L-Shaped Sofa | 6 Seater | Fabric Upholstery | Wooden Frame",
+    "title": "Wakefit L-Shaped 6 Seater Fabric Sofa"
+  },
+  {
+    "category": "Home & Furniture",
+    "discount": 40,
+    "id": "45",
+    "imageURL": "https://rukminim2.flixcart.com/image/612/612/xif0q/wardrobe-closet/n/m/p/no-47-120-particle-board-90-mmozart3drwbwmwnt-brown-nilkamal-190-original-imah6j7jcnuzhhbg.jpeg?q=70",
+    "mrp": 21999,
+    "offers": [
+      "Flat ₹1500 off on Axis Bank Cards",
+      "Free delivery & installation",
+      "Exchange offer available"
+    ],
+    "price": 13199,
+    "ratings": 4.2,
+    "reviews": 942,
+    "specification": "3 Door Wardrobe | Engineered Wood | Matte Finish | With Mirror",
+    "title": "Nilkamal 3-Door Engineered Wood Wardrobe"
+  },
+  {
+    "category": "Home & Furniture",
+    "discount": 45,
+    "id": "46",
+    "imageURL": "https://rukminim2.flixcart.com/image/612/612/xif0q/dining-set/q/m/p/145-beige-72-5-1-rosewood-sheesham-25-rectangle-43-18-86-36-25-original-imahfyqmwwtafet5.jpeg?q=70",
+    "mrp": 25999,
+    "offers": [
+      "Extra 10% off on HDFC Cards",
+      "No Cost EMI up to 9 months",
+      "Free delivery available"
+    ],
+    "price": 14299,
+    "ratings": 4.4,
+    "reviews": 689,
+    "specification": "6-Seater Dining Set | Sheesham Wood | Cushioned Chairs | Dark Walnut Finish",
+    "title": "HomeTown Solid Wood 6-Seater Dining Set"
+  },
+  {
+    "category": "Home & Furniture",
+    "discount": 55,
+    "id": "47",
+    "imageURL": "https://rukminim2.flixcart.com/image/612/612/xif0q/bed/x/i/e/-original-imahy9z8qbtazguh.jpeg?q=70",
+    "mrp": 28999,
+    "offers": [
+      "Flat ₹2000 off on Credit Card EMI",
+      "Exchange offer up to ₹5000",
+      "Free assembly included"
+    ],
+    "price": 12999,
+    "ratings": 4.1,
+    "reviews": 754,
+    "specification": "Queen Size Bed | Engineered Wood | Hydraulic Storage | Walnut Finish",
+    "title": "Godrej Interio Queen Size Hydraulic Storage Bed"
+  },
+  {
+    "category": "Bikes",
+    "discount": 12,
+    "id": "52",
+    "imageURL": "https://rukminim2.flixcart.com/image/612/612/xif0q/key-chain/y/a/t/heavy-duty-stainless-steel-key-chain-compatible-for-new-city-original-imah4kgvzjyhhwpq.jpeg?q=70",
+    "mrp": 125000,
+    "offers": [
+      "Flat ₹3000 off on HDFC Bank Cards",
+      "Exchange offer available",
+      "No Cost EMI from ₹4,167/month"
+    ],
+    "price": 109999,
+    "ratings": 4.5,
+    "reviews": 942,
+    "specification": "149cc | 5 Speed | Mileage 50 kmpl | Disc Brake",
+    "title": "Honda Unicorn 150"
+  },
+  {
+    "category": "Bikes",
+    "discount": 15,
+    "id": "53",
+    "imageURL": "https://rukminim2.flixcart.com/image/312/312/xif0q/motorcycle/s/w/f/-original-imahdx2ymchexkmt.jpeg?q=70",
+    "mrp": 142000,
+    "offers": [
+      "Flat ₹5000 off on ICICI Cards",
+      "Free helmet with purchase",
+      "No Cost EMI available"
+    ],
+    "price": 119999,
+    "ratings": 4.4,
+    "reviews": 768,
+    "specification": "160cc | 5 Speed | Mileage 48 kmpl | LED Headlamp",
+    "title": "TVS Apache RTR 160 4V"
+  },
+  {
+    "category": "Bikes",
+    "discount": 10,
+    "id": "54",
+    "imageURL": "https://rukminim2.flixcart.com/image/612/612/xif0q/motorcycle/q/r/a/-original-imahefymjfzfxuc2.jpeg?q=70",
+    "mrp": 185000,
+    "offers": [
+      "Exchange offer up to ₹15,000",
+      "Flat ₹2000 off on UPI payments",
+      "EMI starting at ₹6,166/month"
+    ],
+    "price": 166499,
+    "ratings": 4.6,
+    "reviews": 1123,
+    "specification": "200cc | 6 Speed | Mileage 45 kmpl | Dual Channel ABS",
+    "title": "Bajaj Pulsar RS 200"
+  },
+  {
+    "category": "Bikes",
+    "discount": 8,
+    "id": "55",
+    "imageURL": "https://rukminim2.flixcart.com/image/312/312/xif0q/motorcycle/k/8/s/-original-imahefym9ew33hnp.jpeg?q=70",
+    "mrp": 198000,
+    "offers": [
+      "Flat ₹5000 off on HDFC Bank Cards",
+      "Free accessories worth ₹2000",
+      "Exchange available"
+    ],
+    "price": 182000,
+    "ratings": 4.7,
+    "reviews": 1345,
+    "specification": "220cc | 5 Speed | Mileage 40 kmpl | Projector Headlamp",
+    "title": "Bajaj Avenger 220 Cruise"
+  },
+  {
+    "category": "Bikes",
+    "discount": 7,
+    "id": "56",
+    "imageURL": "https://rukminim2.flixcart.com/image/312/312/xif0q/motorcycle/o/z/s/-original-imahaupjy6hurasc.jpeg?q=70",
+    "mrp": 225000,
+    "offers": [
+      "Flat ₹8000 off on SBI Cards",
+      "Exchange up to ₹18,000",
+      "No Cost EMI from ₹7,499/month"
+    ],
+    "price": 209499,
+    "ratings": 4.6,
+    "reviews": 987,
+    "specification": "250cc | 6 Speed | Mileage 38 kmpl | Dual Disc Brake",
+    "title": "Suzuki Gixxer 250"
+  },
+  {
+    "category": "Bikes",
+    "discount": 10,
+    "id": "57",
+    "imageURL": "https://rukminim2.flixcart.com/image/612/612/xif0q/motorcycle/e/a/k/-original-imahefymvtrhmcyq.jpeg?q=70",
+    "mrp": 175000,
+    "offers": [
+      "₹5000 off on prepaid orders",
+      "Free riding jacket worth ₹2500",
+      "Easy exchange available"
+    ],
+    "price": 157500,
+    "ratings": 4.4,
+    "reviews": 876,
+    "specification": "180cc | 5 Speed | Mileage 44 kmpl | Disc Brakes",
+    "title": "Hero Xtreme 180R"
+  },
+  {
+    "category": "Bikes",
+    "discount": 9,
+    "id": "58",
+    "imageURL": "https://rukminim2.flixcart.com/image/312/312/xif0q/motorcycle/b/4/l/-original-imahepv7jznrsrgn.jpeg?q=70",
+    "mrp": 310000,
+    "offers": [
+      "Flat ₹10,000 off on HDFC Bank Cards",
+      "Free helmet + gloves combo",
+      "No Cost EMI starting ₹10,333/month"
+    ],
+    "price": 281000,
+    "ratings": 4.8,
+    "reviews": 1295,
+    "specification": "373cc | 6 Speed | Mileage 32 kmpl | Dual ABS",
+    "title": "KTM Duke 390"
+  },
+  {
+    "category": "Bikes",
+    "discount": 5,
+    "id": "59",
+    "imageURL": "https://rukminim2.flixcart.com/image/612/612/kl8ccy80/helmet-visor/d/l/w/rrghem000179-royal-enfield-original-imagyejbkczjfz6r.jpeg?q=70",
+    "mrp": 450000,
+    "offers": [
+      "Exchange up to ₹30,000",
+      "Flat ₹15,000 off on SBI Credit Cards",
+      "No Cost EMI available"
+    ],
+    "price": 427500,
+    "ratings": 4.7,
+    "reviews": 658,
+    "specification": "648cc | 6 Speed | Mileage 25 kmpl | Dual Channel ABS",
+    "title": "Royal Enfield Interceptor 650"
+  },
+  {
+    "category": "Bikes",
+    "discount": 6,
+    "id": "60",
+    "imageURL": "https://rukminim2.flixcart.com/image/612/612/xif0q/bike-fairing-kit/6/u/o/yamaha-r15-v4-hp4-edition-motocross-graphix-original-imah3vgumtrjdhzs.jpeg?q=70",
+    "mrp": 160000,
+    "offers": [
+      "Flat ₹5000 off on UPI payments",
+      "Exchange available",
+      "Free helmet worth ₹2000"
+    ],
+    "price": 150000,
+    "ratings": 4.5,
+    "reviews": 732,
+    "specification": "155cc | 6 Speed | Mileage 47 kmpl | LED Tail Lamp",
+    "title": "Yamaha R15 V4"
+  },
+  {
+    "category": "Bikes",
+    "discount": 10,
+    "id": "61",
+    "imageURL": "https://rukminim2.flixcart.com/image/612/612/xif0q/bike-fairing-kit/z/a/5/17-inch-pro-disc-wheel-cover-for-yamaha-r15-v4-v3-v2-v1-front-original-imahyakgzxhygexm.jpeg?q=70",
+    "mrp": 275000,
+    "offers": [
+      "₹10,000 off on ICICI Cards",
+      "Free riding gear worth ₹5000",
+      "No Cost EMI available"
+    ],
+    "price": 247500,
+    "ratings": 4.6,
+    "reviews": 1143,
+    "specification": "321cc | 6 Speed | Mileage 35 kmpl | ABS Dual Channel",
+    "title": "Yamaha R3"
+  }
 ]

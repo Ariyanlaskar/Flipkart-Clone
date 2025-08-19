@@ -79,7 +79,7 @@ final allProductsByCategoryProvider =
 // This wil fetch our deal of the day section data from firebase
 final dealOfTheDayProvider = FutureProvider<List<ProductModel>>((ref) async {
   final snapshot = await FirebaseFirestore.instance
-      .collectionGroup('DealsOfTheDay') // 🔥 This queries across all paths
+      .collectionGroup('DealsOfTheDay') // This queries across all paths
       .get();
 
   return snapshot.docs.map((doc) => ProductModel.fromMap(doc.data())).toList();
@@ -91,7 +91,7 @@ class PaginatedProductNotifier extends StateNotifier<PaginatedProductState> {
   final Ref ref;
   final String? category;
   DocumentSnapshot? _lastDoc;
-  final int _limit = 4;
+  final int _limit = 10;
 
   PaginatedProductNotifier(this.ref, this.category)
     : super(PaginatedProductState.initial()) {

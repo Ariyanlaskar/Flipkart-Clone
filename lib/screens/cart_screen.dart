@@ -141,6 +141,7 @@ class CartScreen extends ConsumerWidget {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
+                                      // LEFT IMAGE
                                       Stack(
                                         children: [
                                           Container(
@@ -168,16 +169,8 @@ class CartScreen extends ConsumerWidget {
                                                     (context, child, progress) {
                                                       if (progress == null)
                                                         return child;
-                                                      return Itemshimer();
+                                                      return ItemShimmer();
                                                     },
-                                                // (context, child, progress) {
-                                                //   if (progress == null)
-                                                //     return child;
-                                                //   return const Center(
-                                                //     child:
-                                                //         CircularProgressIndicator(),
-                                                //   );
-                                                // },
                                                 errorBuilder:
                                                     (context, _, __) =>
                                                         const Icon(
@@ -223,16 +216,21 @@ class CartScreen extends ConsumerWidget {
                                             ),
                                         ],
                                       ),
+
                                       const SizedBox(width: 20),
+
+                                      // RIGHT SIDE DETAILS
                                       Expanded(
                                         child: Column(
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           children: [
+                                            // PRODUCT TITLE
                                             Text(
                                               product.title,
-                                              maxLines: 3,
+                                              maxLines: 2,
                                               overflow: TextOverflow.ellipsis,
+                                              softWrap: true,
                                               style: TextStyle(
                                                 fontSize: isTablet ? 20 : 16,
                                                 fontWeight: FontWeight.w600,
@@ -240,6 +238,8 @@ class CartScreen extends ConsumerWidget {
                                               ),
                                             ),
                                             const SizedBox(height: 6),
+
+                                            // PRICE ROW
                                             Row(
                                               children: [
                                                 Text(
@@ -254,21 +254,26 @@ class CartScreen extends ConsumerWidget {
                                                 ),
                                                 const SizedBox(width: 10),
                                                 if (product.discount > 0) ...[
-                                                  Text(
-                                                    '₹${product.mrp.toStringAsFixed(0)}',
-                                                    style: TextStyle(
-                                                      fontSize: isTablet
-                                                          ? 16
-                                                          : 14,
-                                                      color: Colors.grey,
-                                                      decoration: TextDecoration
-                                                          .lineThrough,
+                                                  Flexible(
+                                                    child: Text(
+                                                      '₹${product.mrp.toStringAsFixed(0)}',
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                      style: TextStyle(
+                                                        fontSize: isTablet
+                                                            ? 16
+                                                            : 14,
+                                                        color: Colors.grey,
+                                                        decoration:
+                                                            TextDecoration
+                                                                .lineThrough,
+                                                      ),
                                                     ),
                                                   ),
-                                                  const SizedBox(width: 6),
                                                 ],
                                               ],
                                             ),
+
                                             if (product.discount > 0)
                                               Padding(
                                                 padding: const EdgeInsets.only(
@@ -276,6 +281,9 @@ class CartScreen extends ConsumerWidget {
                                                 ),
                                                 child: Text(
                                                   'Save ₹${(product.mrp - product.price).toStringAsFixed(0)} more with Flipkart',
+                                                  maxLines: 1,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
                                                   style: TextStyle(
                                                     fontSize: isTablet
                                                         ? 14
@@ -285,7 +293,10 @@ class CartScreen extends ConsumerWidget {
                                                   ),
                                                 ),
                                               ),
+
                                             const SizedBox(height: 14),
+
+                                            // QUANTITY + REMOVE BUTTON
                                             Row(
                                               mainAxisAlignment:
                                                   MainAxisAlignment
@@ -324,26 +335,29 @@ class CartScreen extends ConsumerWidget {
                                                     }
                                                   },
                                                 ),
-                                                TextButton(
-                                                  onPressed: () async {
-                                                    await ref
-                                                        .read(
-                                                          cartRepositoryProvider,
-                                                        )
-                                                        .removeFromcart(
-                                                          product.id,
-                                                        );
-                                                  },
-                                                  style: TextButton.styleFrom(
-                                                    foregroundColor:
-                                                        Colors.redAccent,
-                                                    textStyle: const TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.w600,
-                                                      fontSize: 14,
+                                                Flexible(
+                                                  child: TextButton(
+                                                    onPressed: () async {
+                                                      await ref
+                                                          .read(
+                                                            cartRepositoryProvider,
+                                                          )
+                                                          .removeFromcart(
+                                                            product.id,
+                                                          );
+                                                    },
+                                                    style: TextButton.styleFrom(
+                                                      foregroundColor:
+                                                          Colors.redAccent,
+                                                      textStyle:
+                                                          const TextStyle(
+                                                            fontWeight:
+                                                                FontWeight.w600,
+                                                            fontSize: 14,
+                                                          ),
                                                     ),
+                                                    child: const Text('Remove'),
                                                   ),
-                                                  child: const Text('Remove'),
                                                 ),
                                               ],
                                             ),

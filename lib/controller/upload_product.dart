@@ -15,11 +15,15 @@ Future<void> uploadProductsToFirestore() async {
     await firestore.collection('products').add({
       'id': product['id'], // keep product id inside document
       'title': product['title'],
-      'description': product['description'],
+      'specification': product['specification'],
       'price': product['price'],
+      'mrp': product['mrp'],
       'discount': product['discount'],
       'imageURL': product['imageURL'],
       'category': product['category'],
+      'ratings': product['ratings'],
+      'reviews': product['reviews'],
+      'offers': product['offers'],
       'createdAt': FieldValue.serverTimestamp(),
     });
   }

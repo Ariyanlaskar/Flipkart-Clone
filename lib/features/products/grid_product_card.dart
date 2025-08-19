@@ -1,6 +1,6 @@
-import 'package:flipkart_clone/model/product_model.dart';
 import 'package:flipkart_clone/screens/product_details_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flipkart_clone/model/product_model.dart';
 
 class ProductCard extends StatelessWidget {
   final ProductModel product;
@@ -11,7 +11,6 @@ class ProductCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        // print("tapped card");
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -20,7 +19,9 @@ class ProductCard extends StatelessWidget {
         );
       },
       child: Container(
-        width: 140,
+        width: MediaQuery.of(context).size.width < 380
+            ? MediaQuery.of(context).size.width * 0.72
+            : 140,
         margin: const EdgeInsets.only(right: 12),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8),
@@ -35,50 +36,67 @@ class ProductCard extends StatelessWidget {
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min, // ✅ allows shrinking
           children: [
+            /// 🔹 Image Section (shrinkable)
             Padding(
-              padding: const EdgeInsets.all(20.0),
+              padding: const EdgeInsets.all(12.0),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(6),
-                child: Image.network(
-                  product.imageURL,
-                  height: 100,
-                  width: double.infinity,
-                  fit: BoxFit.contain,
-                  errorBuilder: (context, error, stackTrace) =>
-                      const Icon(Icons.broken_image),
+                child: SizedBox(
+                  height: MediaQuery.of(context).size.height < 750
+                      ? 80
+                      : 100, // ✅ shrink if small height
+                  width: MediaQuery.of(context).size.height < 750 ? 80 : 100,
+                  child: Image.network(
+                    product.imageURL,
+                    fit: BoxFit.contain,
+                    errorBuilder: (context, error, stackTrace) =>
+                        const Icon(Icons.broken_image, size: 60),
+                  ),
                 ),
               ),
             ),
-            const SizedBox(height: 10),
+
+            const SizedBox(height: 6),
+
+            /// 🔹 Title
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
               child: Text(
                 product.title,
                 textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 13),
+                style: const TextStyle(fontSize: 12), // ✅ slightly smaller
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
               ),
             ),
+
+            /// 🔹 Price
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
               child: Text(
                 "₹${product.price.toStringAsFixed(0)}",
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
-                  fontSize: 13,
+                  fontSize: 12, // ✅ shrink font
                 ),
               ),
             ),
+
+            /// 🔹 Discount
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8),
               child: Text(
                 "${product.discount.toStringAsFixed(0)}% off",
-                style: const TextStyle(color: Colors.green, fontSize: 12),
+                style: const TextStyle(
+                  color: Colors.green,
+                  fontSize: 11,
+                ), // ✅ shrink font
               ),
             ),
-            const SizedBox(height: 8),
+
+            const SizedBox(height: 6), // smaller bottom padding
           ],
         ),
       ),
