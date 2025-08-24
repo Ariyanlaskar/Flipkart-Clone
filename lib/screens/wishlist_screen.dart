@@ -26,6 +26,10 @@ class WishlistScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final wishlistAsync = ref.watch(wishlistStreamProvider);
+    final width = MediaQuery.of(context).size.width;
+
+    final isTablet = width > 800;
+    final isSmallPhone = width < 360;
 
     return SafeArea(
       top: false,
@@ -48,13 +52,16 @@ class WishlistScreen extends ConsumerWidget {
                   children: [
                     Icon(
                       Icons.favorite_border,
-                      size: 100,
+                      size: isSmallPhone ? 70 : 100,
                       color: Colors.grey.shade400,
                     ),
-                    const SizedBox(height: 20),
-                    const Text(
+                    const SizedBox(height: 16),
+                    Text(
                       'Your wishlist is empty',
-                      style: TextStyle(fontSize: 22, color: Colors.black54),
+                      style: TextStyle(
+                        fontSize: isSmallPhone ? 18 : 22,
+                        color: Colors.black54,
+                      ),
                     ),
                   ],
                 ),
@@ -64,17 +71,25 @@ class WishlistScreen extends ConsumerWidget {
             return LayoutBuilder(
               builder: (context, constraints) {
                 final isWideScreen = constraints.maxWidth > 600;
-                final horizontalPadding = isWideScreen ? 24.0 : 12.0;
-                final imageSize = isWideScreen ? 100.0 : 80.0;
-                final cardElevation = isWideScreen ? 8.0 : 4.0;
+                final horizontalPadding = isWideScreen
+                    ? 24.0
+                    : isSmallPhone
+                    ? 8.0
+                    : 12.0;
+                final imageSize = isWideScreen
+                    ? 100.0
+                    : isSmallPhone
+                    ? 65.0
+                    : 80.0;
+                final cardElevation = isWideScreen ? 8.0 : 3.0;
 
                 return ListView.separated(
                   padding: EdgeInsets.symmetric(
-                    vertical: 14,
+                    vertical: 12,
                     horizontal: horizontalPadding,
                   ),
                   itemCount: wishlistItems.length,
-                  separatorBuilder: (_, __) => const SizedBox(height: 14),
+                  separatorBuilder: (_, __) => const SizedBox(height: 12),
                   itemBuilder: (context, index) {
                     final wishlistItem = wishlistItems[index];
 
@@ -85,27 +100,13 @@ class WishlistScreen extends ConsumerWidget {
                             ConnectionState.waiting) {
                           return WishlistItemShimmer(
                             width: double.infinity,
-                            height:
-                                110, // or whatever your card height roughly is
+                            height: 100,
                           );
-                        }
-                        // {
-                        //   return Card(
-                        //     elevation: cardElevation,
-                        //     shape: RoundedRectangleBorder(
-                        //       borderRadius: BorderRadius.circular(14),
-                        //     ),
-                        //     child: const ListTile(
-                        //       title: Text('Loading...'),
-                        //       leading: CircularProgressIndicator(),
-                        //     ),
-                        //   );
-                        // }
-                        else if (!snapshot.hasData || snapshot.data == null) {
+                        } else if (!snapshot.hasData || snapshot.data == null) {
                           return Card(
                             elevation: cardElevation,
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(14),
+                              borderRadius: BorderRadius.circular(12),
                             ),
                             child: const ListTile(
                               title: Text('Product not found'),
@@ -118,213 +119,161 @@ class WishlistScreen extends ConsumerWidget {
                             duration: const Duration(milliseconds: 350),
                             builder: (context, opacity, child) =>
                                 Opacity(opacity: opacity, child: child),
-                            child: MouseRegion(
-                              cursor: SystemMouseCursors.click,
-                              child: Card(
-                                elevation: cardElevation,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(16),
-                                ),
-                                shadowColor: Colors.black26,
-                                child: InkWell(
-                                  borderRadius: BorderRadius.circular(16),
-                                  onTap: () {
-                                    // Optional: Navigate to product detail page
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            ProductDetailScreen(
-                                              product: product,
-                                            ),
-                                      ),
-                                    );
-                                  },
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(16),
-                                    child: Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        // Product Image with shadow
-                                        Container(
-                                          decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(
-                                              12,
-                                            ),
-                                            boxShadow: [
-                                              BoxShadow(
-                                                color: Colors.black.withOpacity(
-                                                  0.1,
-                                                ),
-                                                blurRadius: 10,
-                                                offset: const Offset(0, 5),
-                                              ),
-                                            ],
-                                          ),
-                                          child: ClipRRect(
-                                            borderRadius: BorderRadius.circular(
-                                              12,
-                                            ),
-                                            child: NetworkImageWithShimmer(
-                                              imageUrl: product.imageURL,
-                                            ),
-
-                                            // child: Image.network(
-                                            //   product.imageURL,
-                                            //   width: imageSize,
-                                            //   height: imageSize,
-                                            //   fit: BoxFit.cover,
-                                            //   loadingBuilder: (context, child, progress) {
-                                            //     if (progress == null)
-                                            //       return child;
-                                            //     return SizedBox(
-                                            //       width: imageSize,
-                                            //       height: imageSize,
-                                            //       child: Center(
-                                            //         child: CircularProgressIndicator(
-                                            //           value:
-                                            //               progress.expectedTotalBytes !=
-                                            //                   null
-                                            //               ? progress.cumulativeBytesLoaded /
-                                            //                     progress
-                                            //                         .expectedTotalBytes!
-                                            //               : null,
-                                            //         ),
-                                            //       ),
-                                            //     );
-                                            //   },
-                                            // ),
+                            child: Card(
+                              elevation: cardElevation,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(14),
+                              ),
+                              child: InkWell(
+                                borderRadius: BorderRadius.circular(14),
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          ProductDetailScreen(product: product),
+                                    ),
+                                  );
+                                },
+                                child: Padding(
+                                  padding: EdgeInsets.all(
+                                    isSmallPhone ? 10 : 16,
+                                  ),
+                                  child: Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      ClipRRect(
+                                        borderRadius: BorderRadius.circular(10),
+                                        child: SizedBox(
+                                          width: imageSize,
+                                          height: imageSize,
+                                          child: NetworkImageWithShimmer(
+                                            imageUrl: product.imageURL,
                                           ),
                                         ),
+                                      ),
 
-                                        SizedBox(width: isWideScreen ? 20 : 14),
+                                      SizedBox(width: isWideScreen ? 20 : 12),
 
-                                        // Product details expanded
-                                        Expanded(
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                product.title,
-                                                maxLines: 2,
-                                                overflow: TextOverflow.ellipsis,
-                                                style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: isWideScreen
-                                                      ? 20
-                                                      : 17,
-                                                  letterSpacing: 0.3,
-                                                ),
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              product.title,
+                                              maxLines: 2,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: isSmallPhone
+                                                    ? 14
+                                                    : isWideScreen
+                                                    ? 20
+                                                    : 16,
                                               ),
-                                              const SizedBox(height: 8),
-                                              Row(
-                                                children: [
+                                            ),
+                                            const SizedBox(height: 6),
+                                            Wrap(
+                                              crossAxisAlignment:
+                                                  WrapCrossAlignment.center,
+                                              spacing: 8,
+                                              children: [
+                                                Text(
+                                                  '₹${product.price.toStringAsFixed(0)}',
+                                                  style: TextStyle(
+                                                    fontSize: isSmallPhone
+                                                        ? 14
+                                                        : 16,
+                                                    color: Colors.deepOrange,
+                                                    fontWeight: FontWeight.w700,
+                                                  ),
+                                                ),
+                                                if (product.discount > 0) ...[
                                                   Text(
-                                                    '₹${product.price.toStringAsFixed(0)}',
+                                                    '₹${product.mrp.toStringAsFixed(0)}',
                                                     style: TextStyle(
-                                                      fontSize: isWideScreen
-                                                          ? 18
-                                                          : 16,
-                                                      color: Colors.deepOrange,
-                                                      fontWeight:
-                                                          FontWeight.w700,
+                                                      fontSize: isSmallPhone
+                                                          ? 12
+                                                          : 14,
+                                                      color: Colors.grey,
+                                                      decoration: TextDecoration
+                                                          .lineThrough,
                                                     ),
                                                   ),
-                                                  const SizedBox(width: 14),
-                                                  if (product.discount > 0) ...[
-                                                    Text(
-                                                      '₹${product.mrp.toStringAsFixed(0)}',
-                                                      style: const TextStyle(
-                                                        fontSize: 14,
-                                                        color: Colors.grey,
-                                                        decoration:
-                                                            TextDecoration
-                                                                .lineThrough,
-                                                      ),
-                                                    ),
-                                                    const SizedBox(width: 8),
-                                                    Container(
-                                                      padding:
-                                                          const EdgeInsets.symmetric(
-                                                            horizontal: 7,
-                                                            vertical: 3,
-                                                          ),
-                                                      decoration: BoxDecoration(
-                                                        color: Colors
-                                                            .green
-                                                            .shade600,
-                                                        borderRadius:
-                                                            BorderRadius.circular(
-                                                              5,
-                                                            ),
-                                                      ),
-                                                      child: Text(
-                                                        '${product.discount.toStringAsFixed(0)}% OFF',
-                                                        style: const TextStyle(
-                                                          color: Colors.white,
-                                                          fontWeight:
-                                                              FontWeight.w600,
-                                                          fontSize: 13,
+                                                  Container(
+                                                    padding:
+                                                        EdgeInsets.symmetric(
+                                                          horizontal: 6,
+                                                          vertical: 2,
                                                         ),
+                                                    decoration: BoxDecoration(
+                                                      color:
+                                                          Colors.green.shade600,
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                            4,
+                                                          ),
+                                                    ),
+                                                    child: Text(
+                                                      '${product.discount.toStringAsFixed(0)}% OFF',
+                                                      style: TextStyle(
+                                                        fontSize: isSmallPhone
+                                                            ? 11
+                                                            : 13,
+                                                        color: Colors.white,
+                                                        fontWeight:
+                                                            FontWeight.w600,
                                                       ),
                                                     ),
-                                                  ],
+                                                  ),
                                                 ],
+                                              ],
+                                            ),
+                                            const SizedBox(height: 4),
+                                            Text(
+                                              product.specifications,
+                                              maxLines: isSmallPhone ? 1 : 2,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: TextStyle(
+                                                fontSize: isSmallPhone
+                                                    ? 12
+                                                    : 14,
+                                                color: Colors.black54,
                                               ),
-                                              const SizedBox(height: 6),
-                                              Text(
-                                                product.specifications,
-                                                maxLines: 2,
-                                                overflow: TextOverflow.ellipsis,
-                                                style: TextStyle(
-                                                  fontSize: isWideScreen
-                                                      ? 15
-                                                      : 14,
-                                                  color: Colors.black54,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
+                                            ),
+                                          ],
                                         ),
+                                      ),
 
-                                        // Remove from wishlist button
-                                        Material(
-                                          color: Colors.transparent,
-                                          shape: const CircleBorder(),
-                                          child: InkWell(
-                                            borderRadius: BorderRadius.circular(
-                                              30,
-                                            ),
-                                            splashColor: Colors.red.withOpacity(
-                                              0.3,
-                                            ),
-                                            onTap: () async {
-                                              final wishlistController = ref
-                                                  .read(
-                                                    wishlistControllerProvider,
-                                                  );
-                                              await wishlistController
-                                                  .removeFromWishlist(
-                                                    wishlistItem.productId,
-                                                  );
-                                              showToast(
-                                                'Removed from wishlist',
+                                      InkWell(
+                                        borderRadius: BorderRadius.circular(20),
+                                        splashColor: Colors.red.withOpacity(
+                                          0.3,
+                                        ),
+                                        onTap: () async {
+                                          final wishlistController = ref.read(
+                                            wishlistControllerProvider,
+                                          );
+                                          await wishlistController
+                                              .removeFromWishlist(
+                                                wishlistItem.productId,
                                               );
-                                            },
-                                            child: Padding(
-                                              padding: const EdgeInsets.all(10),
-                                              child: Icon(
-                                                Icons.favorite,
-                                                color: Colors.red.shade700,
-                                                size: isWideScreen ? 32 : 28,
-                                              ),
-                                            ),
+                                          showToast('Removed from wishlist');
+                                        },
+                                        child: Padding(
+                                          padding: EdgeInsets.all(
+                                            isSmallPhone ? 6 : 10,
+                                          ),
+                                          child: Icon(
+                                            Icons.favorite,
+                                            color: Colors.red.shade700,
+                                            size: isSmallPhone ? 22 : 28,
                                           ),
                                         ),
-                                      ],
-                                    ),
+                                      ),
+                                    ],
                                   ),
                                 ),
                               ),

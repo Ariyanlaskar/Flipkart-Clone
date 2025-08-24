@@ -6,7 +6,7 @@ class CartItem {
 
   factory CartItem.fromMap(Map<String, dynamic> map) {
     return CartItem(
-      productId: map['productId'], // ← now doc.id, not field id
+      productId: map['productId'],
       quantity: map['quantity'] ?? 1,
     );
   }

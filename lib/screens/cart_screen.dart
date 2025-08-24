@@ -1,10 +1,12 @@
 import 'package:flipkart_clone/controller/product_provider.dart';
 import 'package:flipkart_clone/model/product_model.dart';
+import 'package:flipkart_clone/screens/buynow_checkout_screen.dart';
 import 'package:flipkart_clone/screens/checkout_screen.dart';
+
 import 'package:flipkart_clone/screens/product_details_screen.dart';
-import 'package:flipkart_clone/widget/shimmer_loading_screen.dart';
+
 import 'package:flipkart_clone/widget/shimmers/cartitem_shimmer.dart';
-import 'package:flipkart_clone/widget/shimmers/itemShimer.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -33,6 +35,8 @@ class CartScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final cartItemsAsync = ref.watch(cartItemsProvider);
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isSmallDevice = screenWidth < 400;
 
     return Scaffold(
       appBar: AppBar(
@@ -142,79 +146,30 @@ class CartScreen extends ConsumerWidget {
                                         CrossAxisAlignment.start,
                                     children: [
                                       // LEFT IMAGE
-                                      Stack(
-                                        children: [
-                                          Container(
-                                            width: isTablet ? 130 : 100,
-                                            height: isTablet ? 130 : 100,
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(12),
-                                              boxShadow: [
-                                                BoxShadow(
-                                                  color: Colors.black12,
-                                                  blurRadius: 12,
-                                                  offset: const Offset(0, 6),
-                                                ),
-                                              ],
-                                              color: Colors.white,
-                                            ),
-                                            child: ClipRRect(
-                                              borderRadius:
-                                                  BorderRadius.circular(12),
-                                              child: Image.network(
-                                                product.imageURL,
-                                                fit: BoxFit.contain,
-                                                loadingBuilder:
-                                                    (context, child, progress) {
-                                                      if (progress == null)
-                                                        return child;
-                                                      return ItemShimmer();
-                                                    },
-                                                errorBuilder:
-                                                    (context, _, __) =>
-                                                        const Icon(
-                                                          Icons.error_outline,
-                                                          size: 40,
-                                                          color:
-                                                              Colors.redAccent,
-                                                        ),
-                                              ),
-                                            ),
+                                      Container(
+                                        width: isTablet ? 130 : 100,
+                                        height: isTablet ? 130 : 100,
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(
+                                            12,
                                           ),
-                                          if (product.discount > 0)
-                                            Positioned(
-                                              top: 6,
-                                              left: 6,
-                                              child: Container(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                      horizontal: 6,
-                                                      vertical: 4,
-                                                    ),
-                                                decoration: BoxDecoration(
-                                                  color: Colors.green[700],
-                                                  borderRadius:
-                                                      BorderRadius.circular(8),
-                                                  boxShadow: const [
-                                                    BoxShadow(
-                                                      color: Colors.black26,
-                                                      blurRadius: 4,
-                                                      offset: Offset(1, 1),
-                                                    ),
-                                                  ],
+                                          color: Colors.white,
+                                        ),
+                                        child: ClipRRect(
+                                          borderRadius: BorderRadius.circular(
+                                            12,
+                                          ),
+                                          child: Image.network(
+                                            product.imageURL,
+                                            fit: BoxFit.contain,
+                                            errorBuilder: (_, __, ___) =>
+                                                const Icon(
+                                                  Icons.error_outline,
+                                                  size: 40,
+                                                  color: Colors.redAccent,
                                                 ),
-                                                child: Text(
-                                                  '${product.discount.toStringAsFixed(0)}% OFF',
-                                                  style: const TextStyle(
-                                                    color: Colors.white,
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 12,
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                        ],
+                                          ),
+                                        ),
                                       ),
 
                                       const SizedBox(width: 20),
@@ -225,21 +180,17 @@ class CartScreen extends ConsumerWidget {
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           children: [
-                                            // PRODUCT TITLE
                                             Text(
                                               product.title,
                                               maxLines: 2,
                                               overflow: TextOverflow.ellipsis,
-                                              softWrap: true,
                                               style: TextStyle(
                                                 fontSize: isTablet ? 20 : 16,
                                                 fontWeight: FontWeight.w600,
-                                                height: 1.3,
                                               ),
                                             ),
                                             const SizedBox(height: 6),
 
-                                            // PRICE ROW
                                             Row(
                                               children: [
                                                 Text(
@@ -253,7 +204,7 @@ class CartScreen extends ConsumerWidget {
                                                   ),
                                                 ),
                                                 const SizedBox(width: 10),
-                                                if (product.discount > 0) ...[
+                                                if (product.discount > 0)
                                                   Flexible(
                                                     child: Text(
                                                       '₹${product.mrp.toStringAsFixed(0)}',
@@ -270,33 +221,11 @@ class CartScreen extends ConsumerWidget {
                                                       ),
                                                     ),
                                                   ),
-                                                ],
                                               ],
                                             ),
 
-                                            if (product.discount > 0)
-                                              Padding(
-                                                padding: const EdgeInsets.only(
-                                                  top: 6,
-                                                ),
-                                                child: Text(
-                                                  'Save ₹${(product.mrp - product.price).toStringAsFixed(0)} more with Flipkart',
-                                                  maxLines: 1,
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                  style: TextStyle(
-                                                    fontSize: isTablet
-                                                        ? 14
-                                                        : 12,
-                                                    color: Colors.green[800],
-                                                    fontWeight: FontWeight.w600,
-                                                  ),
-                                                ),
-                                              ),
-
                                             const SizedBox(height: 14),
 
-                                            // QUANTITY + REMOVE BUTTON
                                             Row(
                                               mainAxisAlignment:
                                                   MainAxisAlignment
@@ -304,6 +233,7 @@ class CartScreen extends ConsumerWidget {
                                               children: [
                                                 _QuantitySelector(
                                                   quantity: quantity,
+                                                  isSmall: isSmallDevice,
                                                   onIncrement: () async {
                                                     await ref
                                                         .read(
@@ -335,30 +265,47 @@ class CartScreen extends ConsumerWidget {
                                                     }
                                                   },
                                                 ),
-                                                Flexible(
-                                                  child: TextButton(
-                                                    onPressed: () async {
-                                                      await ref
-                                                          .read(
-                                                            cartRepositoryProvider,
-                                                          )
-                                                          .removeFromcart(
-                                                            product.id,
-                                                          );
-                                                    },
-                                                    style: TextButton.styleFrom(
-                                                      foregroundColor:
-                                                          Colors.redAccent,
-                                                      textStyle:
-                                                          const TextStyle(
-                                                            fontWeight:
-                                                                FontWeight.w600,
-                                                            fontSize: 14,
-                                                          ),
-                                                    ),
-                                                    child: const Text('Remove'),
-                                                  ),
-                                                ),
+                                                isSmallDevice
+                                                    ? IconButton(
+                                                        onPressed: () async {
+                                                          await ref
+                                                              .read(
+                                                                cartRepositoryProvider,
+                                                              )
+                                                              .removeFromcart(
+                                                                product.id,
+                                                              );
+                                                        },
+                                                        icon: const Icon(
+                                                          Icons.delete_outline,
+                                                          color: Colors.red,
+                                                        ),
+                                                      )
+                                                    : TextButton(
+                                                        onPressed: () async {
+                                                          await ref
+                                                              .read(
+                                                                cartRepositoryProvider,
+                                                              )
+                                                              .removeFromcart(
+                                                                product.id,
+                                                              );
+                                                        },
+                                                        style: TextButton.styleFrom(
+                                                          foregroundColor:
+                                                              Colors.redAccent,
+                                                          textStyle:
+                                                              const TextStyle(
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w600,
+                                                                fontSize: 14,
+                                                              ),
+                                                        ),
+                                                        child: const Text(
+                                                          'Remove',
+                                                        ),
+                                                      ),
                                               ],
                                             ),
                                           ],
@@ -397,6 +344,7 @@ class CartScreen extends ConsumerWidget {
 
 class _QuantitySelector extends StatelessWidget {
   final int quantity;
+  final bool isSmall;
   final Future<void> Function() onIncrement;
   final Future<void> Function() onDecrement;
 
@@ -405,10 +353,14 @@ class _QuantitySelector extends StatelessWidget {
     required this.quantity,
     required this.onIncrement,
     required this.onDecrement,
+    this.isSmall = false,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final padding = isSmall ? 8.0 : 14.0;
+    final fontSize = isSmall ? 14.0 : 16.0;
+
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
@@ -419,24 +371,24 @@ class _QuantitySelector extends StatelessWidget {
           InkWell(
             borderRadius: BorderRadius.circular(20),
             onTap: onDecrement,
-            child: const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 14, vertical: 6),
-              child: Icon(Icons.remove, size: 20, color: Colors.black87),
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: padding, vertical: 4),
+              child: Icon(Icons.remove, size: isSmall ? 16 : 20),
             ),
           ),
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+            padding: EdgeInsets.symmetric(horizontal: padding, vertical: 4),
             child: Text(
               quantity.toString(),
-              style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
+              style: TextStyle(fontWeight: FontWeight.w600, fontSize: fontSize),
             ),
           ),
           InkWell(
             borderRadius: BorderRadius.circular(20),
             onTap: onIncrement,
-            child: const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 14, vertical: 6),
-              child: Icon(Icons.add, size: 20, color: Colors.black87),
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: padding, vertical: 4),
+              child: Icon(Icons.add, size: isSmall ? 16 : 20),
             ),
           ),
         ],
@@ -460,7 +412,7 @@ class _BottomBar extends StatefulWidget {
 }
 
 class _BottomBarState extends State<_BottomBar> {
-  bool _isExpanded = false; // Collapsed by default for cleaner UI
+  bool _isExpanded = false;
 
   @override
   Widget build(BuildContext context) {
@@ -469,7 +421,7 @@ class _BottomBarState extends State<_BottomBar> {
       (sum, data) => sum + (data['product'].price * data['quantity']),
     );
     final taxEstimate = total * 0.18; // 18% GST
-    final deliveryEstimate = 40; // Flat delivery fee
+    final deliveryEstimate = 40;
 
     return Align(
       alignment: Alignment.bottomCenter,
@@ -558,7 +510,7 @@ class _BottomBarState extends State<_BottomBar> {
                 duration: const Duration(milliseconds: 250),
               ),
 
-              // Total & Checkout Button (always visible)
+              // Total & Checkout Button
               Padding(
                 padding: EdgeInsets.symmetric(
                   horizontal: widget.isTablet ? 48 : 20,
@@ -579,14 +531,12 @@ class _BottomBarState extends State<_BottomBar> {
                       onPressed: widget.enrichedCart.isEmpty
                           ? null
                           : () {
-                              // Navigator.push(
-                              //   context,
-                              //   MaterialPageRoute(
-                              //     builder: (context) => CheckoutScreen(
-                              //       cartItems: widget.enrichedCart,
-                              //     ),
-                              //   ),
-                              // );
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => BuyCheckoutScreen(),
+                                ),
+                              );
                             },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF2874F0),

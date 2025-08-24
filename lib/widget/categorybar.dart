@@ -2,9 +2,6 @@ import 'package:flipkart_clone/controller/product_provider.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-// import '../features/auth/presentation/category_product_list_screen.dart';
-
-// ✅ Add this import
 
 class CategoryBar extends ConsumerWidget {
   CategoryBar({super.key});
@@ -22,7 +19,7 @@ class CategoryBar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    print("category bar");
+    // print("category bar");
     final selectedCategory = ref.watch(selectedCategoryProvider);
 
     return SizedBox(
@@ -39,7 +36,6 @@ class CategoryBar extends ConsumerWidget {
             onTap: () {
               final selected = item['title'];
 
-              // 🔄 Update selected category in provider
               ref.read(selectedCategoryProvider.notifier).state =
                   selected == selectedCategory ? null : selected;
             },

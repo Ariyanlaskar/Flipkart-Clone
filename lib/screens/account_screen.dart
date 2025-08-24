@@ -65,14 +65,11 @@ class _AccountScreenState extends State<AccountScreen> {
     final size = MediaQuery.of(context).size;
     final isTablet = size.width > 600;
 
-    // responsive scales
-    final avatarCollapsed = isTablet
-        ? 26.0
-        : 22.0; // avatar size when collapsed in title row
+    final avatarCollapsed = isTablet ? 26.0 : 22.0;
     final tileIconSize = isTablet ? 26.0 : 22.0;
     final fontSize = isTablet ? 17.0 : 15.0;
     final spacing = isTablet ? 16.0 : 12.0;
-    final expandedHeight = isTablet ? 160.0 : 128.0; // compact header
+    final expandedHeight = isTablet ? 160.0 : 128.0;
 
     if (user == null) {
       return const Scaffold(body: Center(child: CircularProgressIndicator()));
@@ -229,7 +226,6 @@ class _AccountScreenState extends State<AccountScreen> {
             ),
           ),
 
-          // Quick actions row (small & subtle)
           SliverToBoxAdapter(
             child: Padding(
               padding: EdgeInsets.fromLTRB(spacing, spacing, spacing, 6),

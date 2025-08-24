@@ -78,7 +78,7 @@ class CartRepo {
     }
   }
 
-  // ✅ Updated to take UID explicitly
+  //  Updated to take UID
   Stream<List<CartItem>> getCartItems(String uid) {
     return _firestore
         .collection("users")
@@ -89,5 +89,74 @@ class CartRepo {
           (snapshot) =>
               snapshot.docs.map((doc) => CartItem.fromMap(doc.data())).toList(),
         );
+  }
+
+  // Checkout Logic
+  Future<void> checkoutCart() async {
+    final uid = userId;
+    if (uid == null) return;
+
+    try {
+      final cartSnapshot = await _firestore
+          .collection("users")
+          .doc(uid)
+          .collection("cart")
+          .get();
+
+      if (cartSnapshot.docs.isEmpty) {
+        throw Exception("Cart is empty");
+      }
+
+      double totalAmount = 0.0;
+      List<Map<String, dynamic>> orderItems = [];
+
+      for (var doc in cartSnapshot.docs) {
+        final data = doc.data();
+        final productSnapshot = await _firestore
+            .collection("products")
+            .doc(data['productId'])
+            .get();
+
+        if (!productSnapshot.exists) continue;
+
+        final productData = productSnapshot.data()!;
+        final price = (productData['price'] ?? 0).toDouble();
+        final quantity = data['quantity'] ?? 1;
+
+        totalAmount += price * quantity;
+
+        orderItems.add({
+          'productId': data['productId'],
+          'quantity': quantity,
+          'price': price,
+        });
+      }
+
+      // Save order to Firestore
+      final orderRef = _firestore
+          .collection("users")
+          .doc(uid)
+          .collection("orders")
+          .doc();
+
+      await orderRef.set({
+        'orderId': orderRef.id,
+        'items': orderItems,
+        'totalAmount': totalAmount,
+        'status': 'pending',
+        'orderedAt': FieldValue.serverTimestamp(),
+      });
+
+      // Clear cart after checkout
+      final batch = _firestore.batch();
+      for (var doc in cartSnapshot.docs) {
+        batch.delete(doc.reference);
+      }
+      await batch.commit();
+
+      print("Checkout successful");
+    } catch (e) {
+      print("Checkout error: $e");
+    }
   }
 }

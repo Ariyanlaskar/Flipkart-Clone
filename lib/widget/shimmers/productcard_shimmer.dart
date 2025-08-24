@@ -10,8 +10,8 @@ class ProductCardShimmer extends StatelessWidget {
       baseColor: Colors.grey.shade300,
       highlightColor: Colors.grey.shade100,
       child: Container(
-        width: 140, // 🔹 match ProductCard
-        margin: const EdgeInsets.only(right: 12), // 🔹 match spacing
+        width: 140,
+        margin: const EdgeInsets.only(right: 12),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(8),
@@ -20,9 +20,8 @@ class ProductCardShimmer extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            // Image placeholder
             Container(
-              height: 100, // 🔹 match ProductCard image size
+              height: 100,
               width: 100,
               decoration: BoxDecoration(
                 color: Colors.grey.shade400,
@@ -30,13 +29,13 @@ class ProductCardShimmer extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 8),
-            // Title placeholder
+
             Container(height: 14, width: 100, color: Colors.grey.shade400),
             const SizedBox(height: 6),
-            // Price placeholder
+
             Container(height: 14, width: 60, color: Colors.grey.shade400),
             const SizedBox(height: 6),
-            // Discount placeholder
+
             Container(height: 12, width: 50, color: Colors.grey.shade400),
           ],
         ),

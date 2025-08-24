@@ -36,17 +36,14 @@ class ProductCard extends StatelessWidget {
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min, // ✅ allows shrinking
+          mainAxisSize: MainAxisSize.min,
           children: [
-            /// 🔹 Image Section (shrinkable)
             Padding(
               padding: const EdgeInsets.all(12.0),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(6),
                 child: SizedBox(
-                  height: MediaQuery.of(context).size.height < 750
-                      ? 80
-                      : 100, // ✅ shrink if small height
+                  height: MediaQuery.of(context).size.height < 750 ? 80 : 100,
                   width: MediaQuery.of(context).size.height < 750 ? 80 : 100,
                   child: Image.network(
                     product.imageURL,
@@ -66,7 +63,7 @@ class ProductCard extends StatelessWidget {
               child: Text(
                 product.title,
                 textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 12), // ✅ slightly smaller
+                style: const TextStyle(fontSize: 12),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -79,24 +76,20 @@ class ProductCard extends StatelessWidget {
                 "₹${product.price.toStringAsFixed(0)}",
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
-                  fontSize: 12, // ✅ shrink font
+                  fontSize: 12,
                 ),
               ),
             ),
 
-            /// 🔹 Discount
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8),
               child: Text(
                 "${product.discount.toStringAsFixed(0)}% off",
-                style: const TextStyle(
-                  color: Colors.green,
-                  fontSize: 11,
-                ), // ✅ shrink font
+                style: const TextStyle(color: Colors.green, fontSize: 11),
               ),
             ),
 
-            const SizedBox(height: 6), // smaller bottom padding
+            const SizedBox(height: 6),
           ],
         ),
       ),

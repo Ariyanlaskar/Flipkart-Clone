@@ -27,10 +27,8 @@ class ProductModel {
     required this.specifications,
   });
 
-  // Getter to simulate images list from single imageURL
   List<String> get images => [imageURL];
 
-  /// ✅ Use this to create from plain Map
   factory ProductModel.fromMap(Map<String, dynamic> map) {
     return ProductModel(
       id: map['id']?.toString() ?? '',
@@ -47,7 +45,6 @@ class ProductModel {
     );
   }
 
-  /// ✅ Use this when using `.withConverter<ProductModel>()`
   factory ProductModel.fromFirestore(
     DocumentSnapshot<Map<String, dynamic>> snapshot,
     SnapshotOptions? options,
@@ -56,7 +53,6 @@ class ProductModel {
     return ProductModel.fromMap(data);
   }
 
-  /// ✅ Required for `toFirestore` in converter
   Map<String, dynamic> toFirestore() {
     return {
       'id': id,

@@ -18,12 +18,11 @@ class AboutUsScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            /// 🔹 Logo & Title
             Center(
               child: Column(
                 children: [
                   Image.asset(
-                    "assets/images/flipkart_logo.png", // <-- your app logo
+                    "assets/images/flipkart_logo.png",
                     height: size.width * 0.18,
                   ),
                   const SizedBox(height: 10),
@@ -49,7 +48,6 @@ class AboutUsScreen extends StatelessWidget {
 
             const SizedBox(height: 24),
 
-            /// 🔹 Section Cards (Flipkart Style)
             _buildSectionCard(
               icon: Icons.store_mall_directory,
               title: "Who We Are",
@@ -82,7 +80,6 @@ class AboutUsScreen extends StatelessWidget {
 
             const SizedBox(height: 40),
 
-            /// 🔹 Footer
             Center(
               child: Text(
                 "© 2025 Flipkart Clone • All Rights Reserved",
@@ -99,7 +96,6 @@ class AboutUsScreen extends StatelessWidget {
     );
   }
 
-  /// 🔹 Reusable Section Card Widget
   Widget _buildSectionCard({
     required IconData icon,
     required String title,

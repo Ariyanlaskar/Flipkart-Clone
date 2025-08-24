@@ -23,7 +23,6 @@ class ItemShimmer extends StatelessWidget {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Thumbnail (fixed size)
                 Container(
                   width: 80,
                   height: 80,
@@ -34,20 +33,17 @@ class ItemShimmer extends StatelessWidget {
                 ),
                 const SizedBox(width: 12),
 
-                // Content (flexible)
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // Title (full width of remaining space)
                       Container(
                         height: 18,
-                        width: screenWidth * 0.5, // half screen width
+                        width: screenWidth * 0.5,
                         color: Colors.grey.shade400,
                       ),
                       const SizedBox(height: 8),
 
-                      // Subtitle 1
                       Container(
                         height: 14,
                         width: screenWidth * 0.35,
@@ -55,7 +51,6 @@ class ItemShimmer extends StatelessWidget {
                       ),
                       const SizedBox(height: 8),
 
-                      // Subtitle 2
                       Container(
                         height: 14,
                         width: screenWidth * 0.25,
@@ -63,18 +58,17 @@ class ItemShimmer extends StatelessWidget {
                       ),
                       const SizedBox(height: 12),
 
-                      // Buttons Row
                       Row(
                         children: [
                           Container(
                             height: 30,
-                            width: screenWidth * 0.25, // 25% of screen
+                            width: screenWidth * 0.25,
                             color: Colors.grey.shade400,
                           ),
                           const SizedBox(width: 8),
                           Container(
                             height: 30,
-                            width: screenWidth * 0.15, // 15% of screen
+                            width: screenWidth * 0.15,
                             color: Colors.grey.shade400,
                           ),
                         ],

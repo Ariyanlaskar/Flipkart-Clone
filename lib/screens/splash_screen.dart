@@ -20,7 +20,7 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     print("splash built");
     return const Scaffold(
-      backgroundColor: Color.fromARGB(255, 232, 244, 9), // Flipkart blue
+      backgroundColor: Color.fromARGB(255, 232, 244, 9),
       body: Center(
         child: Image(
           image: AssetImage('assets/images/f3_logo.png'),

@@ -54,10 +54,10 @@ class DrawerWidget extends StatelessWidget {
           ListTile(
             leading: const Icon(Icons.logout),
             title: const Text('Upload Data'),
-            onTap: () async {
+            onTap: () {
               // handle logout
 
-              await uploadProductsToFirestore();
+              // await uploadProductsToFirestore();
             },
           ),
         ],

@@ -13,17 +13,14 @@ final wishlistRepoProvider = Provider<WishlistRepo>((ref) {
 final wishlistStreamProvider = StreamProvider.autoDispose<List<WishlistItem>>((
   ref,
 ) {
-  final user = ref
-      .watch(authStateProvider)
-      .value; // get current user (User? or null)
+  final user = ref.watch(authStateProvider).value;
 
   if (user == null) {
-    // no user logged in, empty wishlist
     return Stream.value([]);
   }
 
   final repo = WishlistRepo();
-  return repo.getWishlistStream(user.uid); // stream wishlist of logged in user
+  return repo.getWishlistStream(user.uid);
 });
 
 final wishlistControllerProvider = Provider<WishlistController>((ref) {
@@ -50,7 +47,7 @@ final productByIdProvider = FutureProvider.family<ProductModel, String>((
 ) async {
   final querySnapshot = await FirebaseFirestore.instance
       .collection('products')
-      .where('id', isEqualTo: productId) // Query by product field `id`
+      .where('id', isEqualTo: productId)
       .limit(1)
       .get();
 

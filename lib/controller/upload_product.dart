@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 Future<void> uploadProductsToFirestore() async {
-  // Load JSON file
   final String jsonString = await rootBundle.loadString(
     'assets/data/appliance_products.json',
   );
@@ -13,7 +12,7 @@ Future<void> uploadProductsToFirestore() async {
 
   for (var product in products) {
     await firestore.collection('products').add({
-      'id': product['id'], // keep product id inside document
+      'id': product['id'],
       'title': product['title'],
       'specification': product['specification'],
       'price': product['price'],
@@ -28,5 +27,5 @@ Future<void> uploadProductsToFirestore() async {
     });
   }
 
-  print("✅ All products uploaded successfully!");
+  print("All products uploaded successfully!");
 }

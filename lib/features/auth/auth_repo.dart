@@ -83,7 +83,7 @@ class AuthRepository {
       final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
 
       if (googleUser == null) {
-        return null; // User canceled the login
+        return null;
       }
 
       final GoogleSignInAuthentication googleAuth =

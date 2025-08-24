@@ -19,7 +19,7 @@ class WishlistRepo {
         .collection('users')
         .doc(uid)
         .collection('wishlist')
-        .doc(productDocId); // Use product doc ID as wishlist doc ID
+        .doc(productDocId);
 
     final doc = await wishlistRef.get();
 

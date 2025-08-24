@@ -10,6 +10,6 @@ class AddressScreen extends StatefulWidget {
 class _AddressScreenState extends State<AddressScreen> {
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Scaffold(body: Center(child: Text("No Address Available")));
   }
 }

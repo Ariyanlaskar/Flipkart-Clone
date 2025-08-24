@@ -24,7 +24,6 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
     final user = ref.watch(authControllerProvider);
     if (user != null) {
       Future.microtask(() {
-        // ignore: use_build_context_synchronously
         Navigator.pushReplacementNamed(context, AppRoutes.home);
       });
     }
@@ -36,10 +35,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
         elevation: 0,
         title: Row(
           children: [
-            Image.asset(
-              'assets/images/flipkart_logo.png', // Ensure this image exists
-              height: 32,
-            ),
+            Image.asset('assets/images/flipkart_logo.png', height: 32),
             const SizedBox(width: 8),
             const Text(
               'Flipkart',

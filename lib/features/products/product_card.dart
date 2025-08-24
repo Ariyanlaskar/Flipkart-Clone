@@ -35,7 +35,6 @@ class ProductCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            /// 🔹 Image Section
             Padding(
               padding: const EdgeInsets.all(12.0),
               child: ClipRRect(
@@ -58,7 +57,6 @@ class ProductCard extends StatelessWidget {
 
             const SizedBox(height: 8),
 
-            /// 🔹 Title
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
               child: Text(
@@ -70,7 +68,6 @@ class ProductCard extends StatelessWidget {
               ),
             ),
 
-            /// 🔹 Price
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
               child: Text(
@@ -82,7 +79,6 @@ class ProductCard extends StatelessWidget {
               ),
             ),
 
-            /// 🔹 Discount
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8),
               child: Text(

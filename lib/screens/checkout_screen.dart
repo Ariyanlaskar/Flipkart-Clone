@@ -1,240 +1,362 @@
-// import 'package:flipkart_clone/features/address/riverpod_address_management.dart';
-// import 'package:flipkart_clone/screens/checkout_address_screen.dart';
-// import 'package:flutter/material.dart';
-// import 'package:flutter_riverpod/flutter_riverpod.dart';
-// import 'package:flipkart_clone/features/address/address_form_screen.dart';
-// import 'package:flipkart_clone/features/address/address_model.dart';
-// import 'package:flipkart_clone/model/product_model.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flipkart_clone/screens/order_success.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-// class CheckoutScreen extends ConsumerWidget {
-//   final List<Map<String, dynamic>> cartItems;
+import 'package:flipkart_clone/features/cart/cart_repo.dart';
+import 'package:flipkart_clone/model/product_model.dart';
+// or your existing success screen
 
-//   const CheckoutScreen({Key? key, required this.cartItems}) : super(key: key);
+class BuyCheckoutScreen extends ConsumerWidget {
+  const BuyCheckoutScreen({super.key});
 
-//   double getTotal() => cartItems.fold<double>(
-//     0,
-//     (sum, item) => sum + (item['product'].price * item['quantity']),
-//   );
+  Future<ProductModel?> _getProduct(String productDocId) async {
+    final snap = await FirebaseFirestore.instance
+        .collection('products')
+        .doc(productDocId)
+        .get();
+    if (!snap.exists || snap.data() == null) return null;
+    final data = snap.data()!;
+    return ProductModel.fromMap({...data, 'id': snap.id});
+  }
 
-//   @override
-//   Widget build(BuildContext context, WidgetRef ref) {
-//     final List<AddressModel> addresses = ref.watch(addressProvider);
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final uid = FirebaseAuth.instance.currentUser?.uid;
+    if (uid == null) {
+      return const Scaffold(
+        body: Center(child: Text('Please sign in to continue')),
+      );
+    }
 
-//     // Pick the address marked as default, else pick the most recently added one
-//     final AddressModel? selectedAddress = addresses.isNotEmpty
-//         ? addresses.firstWhere((a) => a.isDefault, orElse: () => addresses.last)
-//         : null;
+    final width = MediaQuery.of(context).size.width;
+    final isSmall = width < 360;
 
-//     final total = getTotal();
-//     final shippingCost = total > 500 ? 0.0 : 40.0;
-//     final discount = total * 0.10;
-//     final tax = total * 0.05;
-//     final grandTotal = total - discount + shippingCost + tax;
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Checkout'),
+        centerTitle: true,
+        elevation: 1,
+      ),
+      body: SafeArea(
+        child: StreamBuilder(
+          stream: CartRepo().getCartItems(uid),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            }
+            if (!snapshot.hasData || snapshot.data!.isEmpty) {
+              return const Center(child: Text('Your cart is empty'));
+            }
 
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: const Text('Checkout'),
-//         backgroundColor: const Color(0xFF2874F0),
-//         centerTitle: true,
-//       ),
-//       body: ListView(
-//         children: [
-//           // Progress bar
-//           Container(
-//             width: double.infinity,
-//             padding: const EdgeInsets.symmetric(vertical: 8),
-//             color: Colors.white,
-//             child: LinearProgressIndicator(
-//               value: 0.33,
-//               backgroundColor: Colors.grey.shade300,
-//               valueColor: const AlwaysStoppedAnimation<Color>(
-//                 Color(0xFF2874F0),
-//               ),
-//               minHeight: 6,
-//             ),
-//           ),
+            final cartItems = snapshot.data!;
 
-//           // Address section
-//           Container(
-//             color: Colors.white,
-//             margin: const EdgeInsets.symmetric(vertical: 4),
-//             padding: const EdgeInsets.all(16),
-//             child: Row(
-//               children: [
-//                 const Icon(Icons.location_on, color: Colors.redAccent),
-//                 const SizedBox(width: 12),
-//                 Expanded(
-//                   child: Column(
-//                     crossAxisAlignment: CrossAxisAlignment.start,
-//                     children: [
-//                       Text(
-//                         selectedAddress != null
-//                             ? "${selectedAddress.name} | ${selectedAddress.phone}"
-//                             : "No address selected",
-//                         style: const TextStyle(
-//                           fontWeight: FontWeight.bold,
-//                           fontSize: 16,
-//                         ),
-//                       ),
-//                       const SizedBox(height: 4),
-//                       Text(
-//                         selectedAddress != null
-//                             ? selectedAddress.addressLine
-//                             : "Please add your delivery address",
-//                       ),
-//                       const SizedBox(height: 8),
-//                       OutlinedButton.icon(
-//                         onPressed: () {
-//                           Navigator.push(
-//                             context,
-//                             MaterialPageRoute(
-//                               builder: (_) => const CheckoutAddressScreen(),
-//                             ),
-//                           );
-//                         },
-//                         icon: const Icon(
-//                           Icons.edit_location_alt,
-//                           color: Color(0xFF2874F0),
-//                         ),
-//                         label: Text(
-//                           selectedAddress != null
-//                               ? "Change / Add Address"
-//                               : "Add Address",
-//                           style: const TextStyle(color: Color(0xFF2874F0)),
-//                         ),
-//                       ),
-//                     ],
-//                   ),
-//                 ),
-//               ],
-//             ),
-//           ),
+            return FutureBuilder<List<_LineItem>>(
+              future: Future.wait(
+                cartItems.map((ci) async {
+                  final product = await _getProduct(ci.productId);
+                  if (product == null) return null;
+                  return _LineItem(product: product, quantity: ci.quantity);
+                }),
+              ).then((list) => list.whereType<_LineItem>().toList()),
+              builder: (context, fb) {
+                if (fb.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+                final lines = fb.data ?? [];
+                if (lines.isEmpty) {
+                  return const Center(
+                    child: Text('Some items are unavailable'),
+                  );
+                }
 
-//           // Cart Items
-//           Container(
-//             color: Colors.white,
-//             padding: const EdgeInsets.all(8),
-//             child: Column(
-//               children: cartItems.map((item) {
-//                 final ProductModel product = item['product'];
-//                 final int quantity = item['quantity'];
-//                 return ListTile(
-//                   leading: Image.network(
-//                     product.imageURL,
-//                     width: 50,
-//                     height: 50,
-//                   ),
-//                   title: Text(product.title),
-//                   subtitle: Text("₹${product.price} x $quantity"),
-//                   trailing: Text(
-//                     "₹${(product.price * quantity).toStringAsFixed(0)}",
-//                     style: const TextStyle(fontWeight: FontWeight.bold),
-//                   ),
-//                 );
-//               }).toList(),
-//             ),
-//           ),
+                final subtotal = lines.fold<double>(
+                  0,
+                  (s, e) => s + (e.product.price * e.quantity),
+                );
 
-//           const SizedBox(height: 8),
+                return Column(
+                  children: [
+                    // Dummy address
+                    Padding(
+                      padding: EdgeInsets.all(isSmall ? 8 : 12),
+                      child: Card(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Padding(
+                          padding: EdgeInsets.all(isSmall ? 10 : 14),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Icon(
+                                Icons.location_on,
+                                color: Color(0xFF2874F0),
+                              ),
+                              const SizedBox(width: 8),
+                              Expanded(
+                                child: Text(
+                                  'Ariyan Laskar\n123, Dummy Street,\nPune, Maharashtra - 411001\nPhone: 7002508034',
+                                  style: TextStyle(
+                                    fontSize: isSmall ? 14 : 16,
+                                    fontWeight: FontWeight.w500,
+                                    height: 1.3,
+                                  ),
+                                ),
+                              ),
+                              TextButton(
+                                onPressed: () {},
+                                child: Text(
+                                  'Change',
+                                  style: TextStyle(fontSize: isSmall ? 12 : 14),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
 
-//           // Price details
-//           Container(
-//             color: Colors.white,
-//             padding: const EdgeInsets.all(16),
-//             child: Column(
-//               crossAxisAlignment: CrossAxisAlignment.start,
-//               children: [
-//                 const Text(
-//                   "Price Details",
-//                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-//                 ),
-//                 const Divider(),
-//                 _buildPriceRow("Price", "₹${total.toStringAsFixed(0)}"),
-//                 _buildPriceRow(
-//                   "Discount",
-//                   "-₹${discount.toStringAsFixed(0)}",
-//                   isGreen: true,
-//                 ),
-//                 _buildPriceRow(
-//                   "Shipping",
-//                   shippingCost == 0 ? "Free" : "₹$shippingCost",
-//                   isGreen: shippingCost == 0,
-//                 ),
-//                 _buildPriceRow("Tax", "₹${tax.toStringAsFixed(0)}"),
-//                 const Divider(),
-//                 _buildPriceRow(
-//                   "Total Amount",
-//                   "₹${grandTotal.toStringAsFixed(0)}",
-//                   isBold: true,
-//                 ),
-//               ],
-//             ),
-//           ),
-//         ],
-//       ),
+                    // Items list
+                    Expanded(
+                      child: ListView.separated(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: isSmall ? 8 : 12,
+                          vertical: isSmall ? 6 : 10,
+                        ),
+                        itemCount: lines.length,
+                        separatorBuilder: (_, __) => const SizedBox(height: 10),
+                        itemBuilder: (context, i) {
+                          final line = lines[i];
+                          return Card(
+                            elevation: 2,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Padding(
+                              padding: EdgeInsets.all(isSmall ? 10 : 12),
+                              child: Row(
+                                children: [
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(8),
+                                    child: Image.network(
+                                      line.product.imageURL,
+                                      width: isSmall ? 56 : 70,
+                                      height: isSmall ? 56 : 70,
+                                      fit: BoxFit.contain,
+                                      errorBuilder: (_, __, ___) =>
+                                          const Icon(Icons.image_not_supported),
+                                    ),
+                                  ),
+                                  const SizedBox(width: 10),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          line.product.title,
+                                          maxLines: 2,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: TextStyle(
+                                            fontSize: isSmall ? 14 : 16,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        ),
+                                        const SizedBox(height: 4),
+                                        Row(
+                                          children: [
+                                            Text(
+                                              '₹${line.product.price.toStringAsFixed(0)}',
+                                              style: TextStyle(
+                                                fontSize: isSmall ? 14 : 16,
+                                                color: Colors.deepOrange,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                            const SizedBox(width: 8),
+                                            Text(
+                                              'x${line.quantity}',
+                                              style: TextStyle(
+                                                fontSize: isSmall ? 12 : 14,
+                                                color: Colors.grey[700],
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Text(
+                                    '₹${(line.product.price * line.quantity).toStringAsFixed(0)}',
+                                    style: TextStyle(
+                                      fontSize: isSmall ? 14 : 16,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
 
-//       // Bottom button
-//       bottomNavigationBar: SafeArea(
-//         child: Container(
-//           color: Colors.white,
-//           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-//           child: Row(
-//             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//             children: [
-//               Text(
-//                 "₹${grandTotal.toStringAsFixed(0)}",
-//                 style: const TextStyle(
-//                   fontSize: 18,
-//                   fontWeight: FontWeight.bold,
-//                 ),
-//               ),
-//               ElevatedButton(
-//                 onPressed: () {
-//                   if (selectedAddress == null) {
-//                     ScaffoldMessenger.of(context).showSnackBar(
-//                       const SnackBar(
-//                         content: Text('Please add a delivery address'),
-//                       ),
-//                     );
-//                     return;
-//                   }
-//                   ScaffoldMessenger.of(context).showSnackBar(
-//                     const SnackBar(content: Text('Order placed! (Mock)')),
-//                   );
-//                 },
-//                 style: ElevatedButton.styleFrom(
-//                   backgroundColor: const Color(0xFFFB641B),
-//                 ),
-//                 child: const Text("Place Order"),
-//               ),
-//             ],
-//           ),
-//         ),
-//       ),
-//     );
-//   }
+                    // Bottom bar
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        border: Border(
+                          top: BorderSide(color: Colors.grey.shade300),
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.06),
+                            blurRadius: 8,
+                            offset: const Offset(0, -2),
+                          ),
+                        ],
+                      ),
+                      child: SafeArea(
+                        top: false,
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: isSmall ? 10 : 16,
+                            vertical: isSmall ? 10 : 12,
+                          ),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  'Total: ₹${subtotal.toStringAsFixed(0)}',
+                                  style: TextStyle(
+                                    fontSize: isSmall ? 16 : 18,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                              ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: const Color(0xFF2874F0),
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: isSmall ? 20 : 28,
+                                    vertical: isSmall ? 10 : 12,
+                                  ),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                ),
+                                onPressed: () async {
+                                  final uid =
+                                      FirebaseAuth.instance.currentUser?.uid;
+                                  if (uid == null) return;
 
-//   Widget _buildPriceRow(
-//     String label,
-//     String value, {
-//     bool isGreen = false,
-//     bool isBold = false,
-//   }) {
-//     return Padding(
-//       padding: const EdgeInsets.symmetric(vertical: 4),
-//       child: Row(
-//         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//         children: [
-//           Text(label),
-//           Text(
-//             value,
-//             style: TextStyle(
-//               color: isGreen ? Colors.green : null,
-//               fontWeight: isBold ? FontWeight.bold : null,
-//             ),
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-// }
+                                  try {
+                                    final userRef = FirebaseFirestore.instance
+                                        .collection('users')
+                                        .doc(uid);
+                                    final cartRef = userRef.collection('cart');
+                                    final orderRef = userRef.collection(
+                                      'orders',
+                                    );
+
+                                    final cartSnap = await cartRef.get();
+                                    if (cartSnap.docs.isEmpty) return;
+
+                                    final batch = FirebaseFirestore.instance
+                                        .batch();
+                                    for (final doc in cartSnap.docs) {
+                                      final data = doc.data();
+                                      final product = await FirebaseFirestore
+                                          .instance
+                                          .collection('products')
+                                          .doc(data['productId'])
+                                          .get();
+
+                                      if (!product.exists) continue;
+                                      final productData = product.data()!;
+                                      final orderDoc = orderRef.doc();
+
+                                      batch.set(orderDoc, {
+                                        "orderId": orderDoc.id,
+                                        "productId": data['productId'],
+                                        "title":
+                                            productData['title'] ?? "No Title",
+                                        "imageURL":
+                                            productData['imageURL'] ??
+                                            "https://via.placeholder.com/150",
+                                        "price": productData['price'] ?? 0,
+                                        "quantity": data['quantity'] ?? 1,
+                                        "status": "Pending",
+                                        "address":
+                                            "Ariyan Laskar, Dummy Street, Pune",
+                                        "paymentMethod": "Cash on Delivery",
+                                        "orderedAt":
+                                            FieldValue.serverTimestamp(),
+                                      });
+                                    }
+
+                                    await batch.commit();
+
+                                    Navigator.of(context).pushReplacement(
+                                      MaterialPageRoute(
+                                        builder: (_) =>
+                                            const OrderSuccessScreen(
+                                              productTitle: "All Items",
+                                              paymentMethod: "Cash on Delivery",
+                                            ),
+                                      ),
+                                    );
+
+                                    Future.delayed(
+                                      const Duration(milliseconds: 500),
+                                      () async {
+                                        final clearBatch = FirebaseFirestore
+                                            .instance
+                                            .batch();
+                                        final snap = await cartRef.get();
+                                        for (final doc in snap.docs) {
+                                          clearBatch.delete(doc.reference);
+                                        }
+                                        await clearBatch.commit();
+                                      },
+                                    );
+                                  } catch (e) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text('Order failed: $e'),
+                                      ),
+                                    );
+                                  }
+                                },
+                                child: Text(
+                                  'Place Order',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: isSmall ? 14 : 16,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                );
+              },
+            );
+          },
+        ),
+      ),
+    );
+  }
+}
+
+class _LineItem {
+  final ProductModel product;
+  final int quantity;
+  _LineItem({required this.product, required this.quantity});
+}

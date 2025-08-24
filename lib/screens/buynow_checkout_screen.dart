@@ -4,7 +4,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flipkart_clone/features/order/order_controller.dart';
 import 'package:flipkart_clone/model/product_model.dart';
 
-/// ✅ Local provider for selected payment option
 final selectedPaymentProvider = StateProvider<String?>((ref) => null);
 
 class CheckoutScreen extends ConsumerWidget {
@@ -17,7 +16,6 @@ class CheckoutScreen extends ConsumerWidget {
     final size = MediaQuery.of(context).size;
     final selectedPayment = ref.watch(selectedPaymentProvider);
 
-    // ✅ dynamic price calculation
     double itemTotal = product.price;
     double discountAmount = (product.price * product.discount) / 100;
     double totalAmount = itemTotal - discountAmount;
@@ -50,7 +48,6 @@ class CheckoutScreen extends ConsumerWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              /// Address Section
               Card(
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
@@ -97,9 +94,7 @@ class CheckoutScreen extends ConsumerWidget {
                         ),
                       ),
                       TextButton(
-                        onPressed: () {
-                          // later add address change logic
-                        },
+                        onPressed: () {},
                         child: const Text(
                           "Change",
                           style: TextStyle(color: Colors.blue),
@@ -112,7 +107,7 @@ class CheckoutScreen extends ConsumerWidget {
 
               const SizedBox(height: 16),
 
-              /// Product Details Card
+              // Product Details Card
               Card(
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
@@ -142,7 +137,7 @@ class CheckoutScreen extends ConsumerWidget {
 
               const SizedBox(height: 16),
 
-              /// Order Summary
+              // Order Summary
               Text(
                 "Order Summary",
                 style: TextStyle(
@@ -187,7 +182,7 @@ class CheckoutScreen extends ConsumerWidget {
 
               const SizedBox(height: 16),
 
-              /// Payment Options
+              // Payment Options
               Text(
                 "Payment Options",
                 style: TextStyle(
@@ -223,7 +218,7 @@ class CheckoutScreen extends ConsumerWidget {
           ),
         ),
 
-        /// Bottom Buy Now Button
+        // Buy Now Button
         bottomNavigationBar: Container(
           padding: const EdgeInsets.all(12),
           color: Colors.white,
@@ -271,7 +266,6 @@ class CheckoutScreen extends ConsumerWidget {
     );
   }
 
-  /// helper widget
   Widget summaryRow(
     String title,
     String value, {

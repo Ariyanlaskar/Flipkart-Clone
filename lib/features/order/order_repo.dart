@@ -30,11 +30,50 @@ class OrderRepository {
       "imageURL": imageURL,
       "price": price,
       "quantity": quantity,
-      "status": "Pending", // later: Pending, Shipped, Delivered
-      "address": "Dummy Address, Pune, India", // ✅ temporary
+      "status": "Pending",
+      "address": "Dummy Address, Pune, India",
       "paymentMethod": paymentMethod,
       "orderedAt": FieldValue.serverTimestamp(),
     });
+  }
+
+  // for adding items from cart
+  Future<void> placeOrderFromCart(String paymentMethod) async {
+    final uid = _auth.currentUser?.uid;
+    if (uid == null) throw Exception("User not logged in");
+
+    final cartRef = _firestore.collection("users").doc(uid).collection("cart");
+    final cartSnapshot = await cartRef.get();
+
+    if (cartSnapshot.docs.isEmpty) throw Exception("Cart is empty");
+
+    final batch = _firestore.batch();
+
+    for (var doc in cartSnapshot.docs) {
+      final data = doc.data();
+      final orderRef = _firestore
+          .collection("users")
+          .doc(uid)
+          .collection("orders")
+          .doc();
+
+      batch.set(orderRef, {
+        "orderId": orderRef.id,
+        "productId": data["productId"],
+        "title": data["title"],
+        "imageURL": data["imageURL"],
+        "price": data["price"],
+        "quantity": data["quantity"],
+        "status": "Pending",
+        "address": "Dummy Address, Pune, India",
+        "paymentMethod": paymentMethod,
+        "orderedAt": FieldValue.serverTimestamp(),
+      });
+
+      batch.delete(cartRef.doc(doc.id));
+    }
+
+    await batch.commit();
   }
 
   Stream<List<OrderModel>> getOrders() {
@@ -45,7 +84,7 @@ class OrderRepository {
         .collection("users")
         .doc(uid)
         .collection("orders")
-        .orderBy("orderedAt", descending: true) // latest orders first
+        .orderBy("orderedAt", descending: true)
         .snapshots()
         .map((snapshot) {
           return snapshot.docs.map((doc) {

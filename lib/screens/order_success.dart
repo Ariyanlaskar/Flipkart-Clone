@@ -85,7 +85,7 @@ class OrderSuccessScreen extends StatelessWidget {
                   Navigator.pushNamedAndRemoveUntil(
                     context,
                     '/home',
-                    (route) => false, // removes all prev routes
+                    (route) => false,
                   );
                 },
                 child: const Text(

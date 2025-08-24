@@ -65,7 +65,6 @@ PreferredSizeWidget buildFlipkartAppBar(BuildContext context, WidgetRef ref) {
           ),
         ),
 
-        // 🛒 Cart Icon with badge
         Stack(
           children: [
             IconButton(
@@ -101,7 +100,6 @@ PreferredSizeWidget buildFlipkartAppBar(BuildContext context, WidgetRef ref) {
           ],
         ),
 
-        // 👤 Profile Icon
         Builder(
           builder: (context) => IconButton(
             onPressed: () {

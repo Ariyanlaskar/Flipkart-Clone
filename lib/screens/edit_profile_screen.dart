@@ -28,7 +28,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
     try {
       await user?.updateDisplayName(_nameController.text.trim());
-      await user?.reload(); // Refresh user data
+      await user?.reload();
 
       Fluttertoast.showToast(msg: "Profile updated");
       Navigator.pop(context);

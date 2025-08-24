@@ -39,10 +39,7 @@ final categoryProductsProvider =
       return query.snapshots().map((snapshot) {
         return snapshot.docs.map((doc) {
           final data = doc.data() as Map<String, dynamic>;
-          return ProductModel.fromMap({
-            'id': doc.id, // include document ID
-            ...data,
-          });
+          return ProductModel.fromMap({'id': doc.id, ...data});
         }).toList();
       });
     });

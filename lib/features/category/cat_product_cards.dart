@@ -20,7 +20,7 @@ class CatProductCards extends StatelessWidget {
       },
       child: Container(
         width: 140,
-        // works for horizontal lists, ignored in grid
+
         margin: const EdgeInsets.only(right: 12, bottom: 8),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8),

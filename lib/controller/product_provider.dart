@@ -10,7 +10,7 @@ final authStateProvider = StreamProvider<User?>((ref) {
   return FirebaseAuth.instance.authStateChanges();
 });
 
-//Implementing search functionlaity(retrieve search history,search by words)
+//Implementing search functionlaity
 
 final searchQueryProvider = StateProvider<String>((ref) => '');
 
@@ -22,7 +22,6 @@ final searchResultsProvider = FutureProvider<List<ProductModel>>((ref) async {
       .collection('products')
       .get();
 
-  // Client-side filtering for now (Firestore doesn't support 'contains' natively)
   return snapshot.docs
       .map((doc) => ProductModel.fromMap(doc.data()))
       .where(
@@ -31,7 +30,6 @@ final searchResultsProvider = FutureProvider<List<ProductModel>>((ref) async {
       .toList();
 });
 
-/// Holds the currently selected category (null means nothing selected)
 final selectedCategoryProvider = StateProvider<String?>((ref) => null);
 
 final productListProvider = FutureProvider<List<ProductModel>>((ref) async {
@@ -68,9 +66,9 @@ final allProductsByCategoryProvider =
           .collectionGroup('DealsOfTheDay')
           .get();
 
-      for (var doc in test.docs) {
-        print("📦 Document ID: ${doc.id} | category: ${doc['category']}");
-      }
+      // for (var doc in test.docs) {
+      //   print("Document ID: ${doc.id} | category: ${doc['category']}");
+      // }
 
       // 3. Combine and return
       return [...topLevelProducts, ...dealProducts];
@@ -85,7 +83,6 @@ final dealOfTheDayProvider = FutureProvider<List<ProductModel>>((ref) async {
   return snapshot.docs.map((doc) => ProductModel.fromMap(doc.data())).toList();
 });
 
-// This is for product pagination which will enable lazy loading
 // For lazyloading feature
 class PaginatedProductNotifier extends StateNotifier<PaginatedProductState> {
   final Ref ref;
@@ -152,14 +149,7 @@ final paginatedProductsProvider =
       String
     >((ref, category) => PaginatedProductNotifier(ref, category));
 
-// For splash screen
-
 final splashControllerProvider = FutureProvider<void>((ref) async {
-  // Wait for Firebase and auth state to resolve
-
-  // Optionally wait for critical data too:
-  // await ref.read(paginatedProductsProvider('ALL').notifier).fetchInitial();
-
   await Future.delayed(
     const Duration(milliseconds: 3000),
   ); // slight delay to show splash
@@ -191,7 +181,3 @@ class CartItemsNotifier extends StateNotifier<List<ProductModel>> {
     state = [];
   }
 }
-
-// final cartItemsProvider =
-//     StateNotifierProvider<CartItemsNotifier, List<ProductModel>>(
-//         (ref) => CartItemsNotifier());

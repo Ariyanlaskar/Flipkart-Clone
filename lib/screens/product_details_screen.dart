@@ -40,7 +40,7 @@ class ProductDetailScreen extends ConsumerWidget {
                 _buildFlipkartAssured(),
                 _buildOffers(product),
                 _buildSpecifications(product),
-                const SizedBox(height: 80), // leave room for bottom bar
+                const SizedBox(height: 80),
               ],
             ),
           );

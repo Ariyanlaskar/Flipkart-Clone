@@ -18,7 +18,6 @@ class HelpSupportScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            /// 🔹 Search Bar
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
               decoration: BoxDecoration(
@@ -47,7 +46,6 @@ class HelpSupportScreen extends StatelessWidget {
 
             const SizedBox(height: 20),
 
-            /// 🔹 Common Issues
             Text(
               "Common Issues",
               style: TextStyle(
@@ -75,7 +73,6 @@ class HelpSupportScreen extends StatelessWidget {
 
             const SizedBox(height: 20),
 
-            /// 🔹 FAQ Section
             Text(
               "Frequently Asked Questions",
               style: TextStyle(
@@ -102,7 +99,6 @@ class HelpSupportScreen extends StatelessWidget {
 
             const SizedBox(height: 20),
 
-            /// 🔹 Contact Options
             Text(
               "Need More Help?",
               style: TextStyle(
@@ -132,7 +128,6 @@ class HelpSupportScreen extends StatelessWidget {
 
             const SizedBox(height: 40),
 
-            /// 🔹 Footer
             Center(
               child: Text(
                 "© 2025 Flipkart Clone • Support Team",
@@ -149,7 +144,6 @@ class HelpSupportScreen extends StatelessWidget {
     );
   }
 
-  /// 🔹 Common Issue Tile
   Widget _buildIssueTile(String title, IconData icon, Size size) {
     return Card(
       elevation: 1,
@@ -168,7 +162,6 @@ class HelpSupportScreen extends StatelessWidget {
     );
   }
 
-  /// 🔹 FAQ Expandable Tile
   Widget _buildFaq(String question, String answer, Size size) {
     return Container(
       margin: const EdgeInsets.only(bottom: 10),
@@ -210,7 +203,6 @@ class HelpSupportScreen extends StatelessWidget {
     );
   }
 
-  /// 🔹 Contact Option Tile
   Widget _buildContactTile(
     String title,
     String subtitle,

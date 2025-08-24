@@ -1,6 +1,5 @@
 import 'package:flipkart_clone/main.dart';
 import 'package:flutter/material.dart';
-// import to get navigatorKey (adjust import path if needed)
 
 void showCustomToast(String message) {
   final overlay = navigatorKey.currentState?.overlay;
@@ -35,8 +34,6 @@ void showCustomToast(String message) {
   Future.delayed(const Duration(seconds: 1), () {
     try {
       overlayEntry.remove();
-    } catch (_) {
-      // ignore if already removed
-    }
+    } catch (_) {}
   });
 }

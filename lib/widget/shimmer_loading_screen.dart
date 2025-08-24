@@ -20,9 +20,9 @@ class NetworkImageWithShimmer extends StatelessWidget {
       width: width,
       height: height,
       fit: BoxFit.cover,
-      // Here is the key part:
+
       loadingBuilder: (context, child, loadingProgress) {
-        if (loadingProgress == null) return child; // Image loaded
+        if (loadingProgress == null) return child;
         // While loading, show shimmer:
         return WishlistItemShimmer(width: width, height: height);
       },

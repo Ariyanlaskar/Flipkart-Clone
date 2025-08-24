@@ -21,14 +21,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   bool _didListen = false;
 
   @override
-  // void initState() {
-  //   super.initState();
-  //   ref.listen<User?>(authControllerProvider, (previous, next) {
-  //     if (next != null) {
-  //       Navigator.pushReplacementNamed(context, '/homescreen');
-  //     }
-  //   });
-  // }
   Widget build(BuildContext context) {
     // final user = ref.watch(authControllerProvider);
     // if (user != null) {
@@ -36,7 +28,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     //     Navigator.pushReplacementNamed(
     //       context,
     //       AppRoutes.home,
-    //     ); // << change to correct route
+    //     );
     //   });
     // }
     if (!_didListen) {
@@ -50,9 +42,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       _didListen = true;
     }
 
-    // print("login page built");
-
-    print("login page built");
     return Scaffold(
       backgroundColor: const Color(0xFFF1F3F6),
       appBar: AppBar(
@@ -141,7 +130,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       Align(
                         alignment: Alignment.centerRight,
                         child: TextButton(
-                          onPressed: () {}, // Add forgot password logic here
+                          onPressed: () {},
                           child: const Text("Forgot Password?"),
                         ),
                       ),
